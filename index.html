@@ -212,6 +212,10 @@
     transform:rotate(90deg) translateY(-100%);
     transform-origin:top left;
   }
+  /* player turned the phone the other way — mirror the rotation so the word stays upright */
+  html.rot.flip #ready,html.rot.flip #count,html.rot.flip #play,html.rot.flip #results{
+    transform:rotate(-90deg) translateX(-100%);
+  }
 
   @media (prefers-reduced-motion: reduce){
     *{transition:none !important;animation:none !important}
@@ -277,7 +281,7 @@
     <div class="clock" id="clock">1:30</div>
   </div>
   <div class="wordzone"><div class="word" id="word"></div></div>
-  <div class="tilthint">Tilt down = got it &middot; Tilt up = pass</div>
+  <div class="tilthint" id="tiltHint">Tilt down = got it &middot; Tilt up = pass</div>
 </div>
 
 <!-- RESULTS -->
@@ -606,33 +610,33 @@ const PACKS = {
     "Óin","Glóin","Dori","Nori","Ori","Bard the Bowman","Thranduil","Tauriel",
     "Beorn","Azog the Defiler","Bolg","Smaug","The Great Goblin","The Master of Lake-town","Thrór","Thráin",
     "Dáin Ironfoot","The Necromancer","Halbrand","Adar","Nori Brandyfoot","Arondir","Prince Durin","Disa",
-    "Queen Míriel","Ar-Pharazôn","The Stranger","Bill the Pony","Shadowfax","Gwaihir","The Balrog","Durin's Bane",
-    "Fell Beast","Warg","Oliphaunt","Cave Troll","Uruk-hai","The Watcher in the Water","Barrow-wights","Mirkwood Spiders",
-    "Stone Giants","The Great Eagles","Huorns","Crebain","Hobbits","Elves","Dwarves","Ents",
-    "Entwives","Orcs","Goblins","Trolls","The Istari","Rohirrim","Dúnedain","Rangers of the North",
-    "Haradrim","Easterlings","Halflings","Hobbiton","Bag End","Bagshot Row","Bree","The Prancing Pony",
-    "The Mines of Moria","Khazad-dûm","Lothlórien","Isengard","Orthanc","Edoras","Meduseld","Minas Morgul",
-    "Osgiliath","Barad-dûr","The Black Gate","Cirith Ungol","The Dead Marshes","Emyn Muil","Fangorn Forest","Mirkwood",
-    "Erebor","The Lonely Mountain","Lake-town","Dale","Weathertop","Amon Hen","The Argonath","The Anduin",
-    "The Grey Havens","Valinor","The Undying Lands","Númenor","Eregion","Lindon","The Paths of the Dead","Dunharrow",
-    "Pelennor Fields","Ithilien","Buckland","The Brandywine River","The Old Forest","The Barrow-downs","The Green Dragon","Bywater",
-    "Caradhras","The Misty Mountains","Rauros Falls","Dol Guldur","Mount Gundabad","The Iron Hills","Ravenhill","Trollshaws",
-    "The Gap of Rohan","Bucklebury Ferry","Balin's Tomb","The Houses of Healing","Middle-earth","Arnor","Rhûn","Harad",
-    "The Blue Mountains","The Gladden Fields","Sting","Glamdring","Orcrist","Andúril","Narsil","The Palantír",
-    "The Phial of Galadriel","Lembas Bread","Elven Rope","The Evenstar","The Arkenstone","The Red Book of Westmarch","The Horn of Gondor","The Mirror of Galadriel",
-    "The Three Elven Rings","Nenya","Narya","Vilya","Grond","Morgul Blade","Gandalf's Staff","Pipe-weed",
-    "Old Toby","Longbottom Leaf","Kingsfoil","Ent-draught","Thrór's Map","The Black Arrow","The Beacons of Gondor","The Army of the Dead",
-    "The White Tree of Gondor","The Silmarils","Elevenses","The Fellowship of the Ring","The Two Towers","The Return of the King","An Unexpected Journey","The Desolation of Smaug",
-    "The Battle of the Five Armies","The Rings of Power","The Silmarillion","J.R.R. Tolkien","Peter Jackson","Howard Shore","The Ring-bearer","Ringwraiths",
-    "Strider","Mithrandir","Gandalf the Grey","Gandalf the White","The White Council","Thorin's Company","The Steward of Gondor","The War of the Ring",
-    "The Second Age","The Third Age","The Last Alliance","The Council of Elrond","The Scouring of the Shire","Riddles in the Dark","Bilbo's Eleventy-First Birthday","The Breaking of the Fellowship",
-    "The Ride of the Rohirrim","Dragon Sickness","The Entmoot","Hobbit-hole","\"You shall not pass!\"","\"One does not simply\"","\"A wizard is never late\"","\"You have my sword\"",
-    "\"And my bow\"","\"And my axe\"","\"Taking the hobbits to Isengard\"","\"Po-ta-toes\"","\"I am no man\"","\"For Frodo\"","\"Fool of a Took!\"","\"Fly, you fools!\"",
-    "\"Not all who wander are lost\"","\"You bow to no one\"","\"But I can carry you!\"","\"Nobody tosses a Dwarf\"","\"Still only counts as one\"","\"Speak, friend, and enter\"","\"Mellon\"","\"The Beacons are lit\"",
-    "\"Shire! Baggins!\"","\"It comes in pints?\"","\"A red sun rises\"","Elijah Wood","Ian McKellen","Viggo Mortensen","Sean Astin","Orlando Bloom",
-    "Sean Bean","Cate Blanchett","Liv Tyler","Hugo Weaving","Andy Serkis","Christopher Lee","Ian Holm","Dominic Monaghan",
-    "Billy Boyd","John Rhys-Davies","Karl Urban","Miranda Otto","Bernard Hill","David Wenham","Martin Freeman","Richard Armitage",
-    "Benedict Cumberbatch","Luke Evans","Evangeline Lilly","Lee Pace","Morfydd Clark"
+    "Queen Míriel","Ar-Pharazôn","The Stranger","Bill the Pony","Shadowfax","Gwaihir","Durin's Bane","Fell Beast",
+    "Warg","Oliphaunt","Cave Troll","Uruk-hai","The Watcher in the Water","Barrow-wights","Mirkwood Spiders","Stone Giants",
+    "The Great Eagles","Huorns","Crebain","Hobbits","Elves","Dwarves","Ents","Entwives",
+    "Orcs","Goblins","Trolls","The Istari","Rohirrim","Dúnedain","Rangers of the North","Haradrim",
+    "Easterlings","Halflings","Hobbiton","Bag End","Bagshot Row","Bree","The Prancing Pony","The Mines of Moria",
+    "Khazad-dûm","Lothlórien","Isengard","Orthanc","Edoras","Meduseld","Minas Morgul","Osgiliath",
+    "Barad-dûr","The Black Gate","Cirith Ungol","The Dead Marshes","Emyn Muil","Fangorn Forest","Mirkwood","Erebor",
+    "The Lonely Mountain","Lake-town","Dale","Weathertop","Amon Hen","The Argonath","The Anduin","The Grey Havens",
+    "Valinor","The Undying Lands","Númenor","Eregion","Lindon","The Paths of the Dead","Dunharrow","Pelennor Fields",
+    "Ithilien","Buckland","The Brandywine River","The Old Forest","The Barrow-downs","The Green Dragon","Bywater","Caradhras",
+    "The Misty Mountains","Rauros Falls","Dol Guldur","Mount Gundabad","The Iron Hills","Ravenhill","Trollshaws","The Gap of Rohan",
+    "Bucklebury Ferry","Balin's Tomb","The Houses of Healing","Middle-earth","Arnor","Rhûn","Harad","The Blue Mountains",
+    "The Gladden Fields","Sting","Glamdring","Orcrist","Andúril","Narsil","The Palantír","The Phial of Galadriel",
+    "Lembas Bread","Elven Rope","The Evenstar","The Arkenstone","The Red Book of Westmarch","The Horn of Gondor","The Mirror of Galadriel","The Three Elven Rings",
+    "Nenya","Narya","Vilya","Grond","Morgul Blade","Gandalf's Staff","Pipe-weed","Old Toby",
+    "Longbottom Leaf","Kingsfoil","Ent-draught","Thrór's Map","The Black Arrow","The Beacons of Gondor","The Army of the Dead","The White Tree of Gondor",
+    "The Silmarils","Elevenses","The Fellowship of the Ring","The Two Towers","The Return of the King","An Unexpected Journey","The Desolation of Smaug","The Battle of the Five Armies",
+    "The Rings of Power","The Silmarillion","J.R.R. Tolkien","Peter Jackson","Howard Shore","The Ring-bearer","Ringwraiths","Strider",
+    "Mithrandir","Gandalf the Grey","Gandalf the White","The White Council","Thorin's Company","The Steward of Gondor","The War of the Ring","The Second Age",
+    "The Third Age","The Last Alliance","The Council of Elrond","The Scouring of the Shire","Riddles in the Dark","Bilbo's Eleventy-First Birthday","The Breaking of the Fellowship","The Ride of the Rohirrim",
+    "Dragon Sickness","The Entmoot","Hobbit-hole","\"You shall not pass!\"","\"One does not simply\"","\"A wizard is never late\"","\"You have my sword\"","\"And my bow\"",
+    "\"And my axe\"","\"Taking the hobbits to Isengard\"","\"Po-ta-toes\"","\"I am no man\"","\"For Frodo\"","\"Fool of a Took!\"","\"Fly, you fools!\"","\"Not all who wander are lost\"",
+    "\"You bow to no one\"","\"But I can carry you!\"","\"Nobody tosses a Dwarf\"","\"Still only counts as one\"","\"Speak, friend, and enter\"","\"Mellon\"","\"The Beacons are lit\"","\"Shire! Baggins!\"",
+    "\"It comes in pints?\"","\"A red sun rises\"","Elijah Wood","Ian McKellen","Viggo Mortensen","Sean Astin","Orlando Bloom","Sean Bean",
+    "Cate Blanchett","Liv Tyler","Hugo Weaving","Andy Serkis","Christopher Lee","Ian Holm","Dominic Monaghan","Billy Boyd",
+    "John Rhys-Davies","Karl Urban","Miranda Otto","Bernard Hill","David Wenham","Martin Freeman","Richard Armitage","Benedict Cumberbatch",
+    "Luke Evans","Evangeline Lilly","Lee Pace","Morfydd Clark"
   ]},
   harrypotter: { name:"Harry Potter", desc:"Hogwarts, quidditch…", alias:["harry potter","hogwarts","wizard","hp","potter"], words:[
     "Harry Potter","Hermione Granger","Ron Weasley","Dumbledore","Voldemort","Snape","Hagrid","Draco Malfoy",
@@ -659,23 +663,22 @@ const PACKS = {
     "Bowtruckle","Thunderbird","Obscurus","Mandrake","Veela","The Giant Squid","Hogsmeade","Knockturn Alley",
     "The Leaky Cauldron","Gringotts","The Burrow","Privet Drive","Godric's Hollow","The Ministry of Magic","The Department of Mysteries","The Great Hall",
     "The Forbidden Forest","The Chamber of Secrets","The Room of Requirement","The Astronomy Tower","Hagrid's Hut","The Shrieking Shack","The Whomping Willow","Platform Nine and Three-Quarters",
-    "King's Cross Station","The Hogwarts Express","Honeydukes","The Three Broomsticks","Weasleys' Wizard Wheezes","Malfoy Manor","Grimmauld Place","Ilvermorny",
-    "Beauxbatons","Durmstrang","St Mungo's","Dumbledore's Office","The Black Lake","The Restricted Section","The Gryffindor Common Room","The Cupboard Under the Stairs",
-    "The Elder Wand","The Invisibility Cloak","The Resurrection Stone","The Deathly Hallows","The Marauder's Map","The Golden Snitch","Quaffle","Bludger",
-    "Nimbus 2000","Firebolt","Time-Turner","Pensieve","The Sword of Gryffindor","The Sorting Hat","The Philosopher's Stone","Tom Riddle's Diary",
-    "Slytherin's Locket","Howler","Remembrall","Portkey","Floo Powder","The Mirror of Erised","The Goblet of Fire","The Vanishing Cabinet",
-    "The Monster Book of Monsters","Extendable Ears","Wizard Chess","The Knight Bus","The Flying Ford Anglia","The Daily Prophet","The Quibbler","Devil's Snare",
-    "Newt's Suitcase","The Triwizard Cup","Chocolate Frogs","Bertie Bott's Every Flavour Beans","Pumpkin Juice","Pumpkin Pasties","Treacle Tart","Firewhisky",
-    "Muggle","Squib","Mudblood","Pure-blood","The Half-Blood Prince","Parseltongue","The Dark Mark","Death Eaters",
-    "The Order of the Phoenix","Dumbledore's Army","The Marauders","The House Cup","Prefect","Herbology","Potions Class","Defence Against the Dark Arts",
-    "Transfiguration","Divination","Care of Magical Creatures","Seeker","Keeper","Chaser","Beater","The Quidditch World Cup",
-    "The Triwizard Tournament","The Yule Ball","The Battle of Hogwarts","Auror","The Boy Who Lived","You-Know-Who","The Chosen One","The Unbreakable Vow",
-    "Animagus","Apparition","The Prophecy","Fantastic Beasts","\"Yer a wizard, Harry\"","\"Always\"","\"After all this time?\"","\"Ten points to Gryffindor\"",
-    "\"It's LeviOsa, not LevioSA\"","\"Mischief Managed\"","\"I Solemnly Swear\"","\"Dobby is a free elf\"","\"Not my daughter!\"","\"Troll in the dungeon!\"","\"Turn to page 394\"","\"I must not tell lies\"",
-    "Daniel Radcliffe","Emma Watson","Rupert Grint","Alan Rickman","Maggie Smith","Robbie Coltrane","Michael Gambon","Richard Harris",
-    "Ralph Fiennes","Helena Bonham Carter","Gary Oldman","David Thewlis","Tom Felton","Evanna Lynch","Matthew Lewis","Bonnie Wright",
-    "Emma Thompson","Kenneth Branagh","Brendan Gleeson","Imelda Staunton","Jason Isaacs","Eddie Redmayne","Johnny Depp","Jude Law",
-    "Mads Mikkelsen","Warwick Davis","J.K. Rowling"
+    "King's Cross Station","Honeydukes","The Three Broomsticks","Weasleys' Wizard Wheezes","Malfoy Manor","Grimmauld Place","Ilvermorny","Beauxbatons",
+    "Durmstrang","St Mungo's","Dumbledore's Office","The Black Lake","The Restricted Section","The Gryffindor Common Room","The Cupboard Under the Stairs","The Elder Wand",
+    "The Resurrection Stone","The Deathly Hallows","Quaffle","Bludger","Nimbus 2000","Firebolt","Time-Turner","Pensieve",
+    "The Sword of Gryffindor","The Philosopher's Stone","Tom Riddle's Diary","Slytherin's Locket","Howler","Remembrall","Portkey","Floo Powder",
+    "The Mirror of Erised","The Goblet of Fire","The Vanishing Cabinet","The Monster Book of Monsters","Extendable Ears","Wizard Chess","The Knight Bus","The Flying Ford Anglia",
+    "The Daily Prophet","The Quibbler","Devil's Snare","Newt's Suitcase","The Triwizard Cup","Chocolate Frogs","Bertie Bott's Every Flavour Beans","Pumpkin Juice",
+    "Pumpkin Pasties","Treacle Tart","Firewhisky","Muggle","Squib","Mudblood","Pure-blood","The Half-Blood Prince",
+    "Parseltongue","The Dark Mark","Death Eaters","The Order of the Phoenix","Dumbledore's Army","The Marauders","The House Cup","Prefect",
+    "Herbology","Potions Class","Defence Against the Dark Arts","Transfiguration","Divination","Care of Magical Creatures","Seeker","Keeper",
+    "Chaser","Beater","The Quidditch World Cup","The Yule Ball","The Battle of Hogwarts","Auror","The Boy Who Lived","You-Know-Who",
+    "The Chosen One","The Unbreakable Vow","Animagus","Apparition","The Prophecy","Fantastic Beasts","\"Yer a wizard, Harry\"","\"Always\"",
+    "\"After all this time?\"","\"Ten points to Gryffindor\"","\"It's LeviOsa, not LevioSA\"","\"Mischief Managed\"","\"I Solemnly Swear\"","\"Dobby is a free elf\"","\"Not my daughter!\"","\"Troll in the dungeon!\"",
+    "\"Turn to page 394\"","\"I must not tell lies\"","Daniel Radcliffe","Emma Watson","Rupert Grint","Alan Rickman","Maggie Smith","Robbie Coltrane",
+    "Michael Gambon","Richard Harris","Ralph Fiennes","Helena Bonham Carter","Gary Oldman","David Thewlis","Tom Felton","Evanna Lynch",
+    "Matthew Lewis","Bonnie Wright","Emma Thompson","Kenneth Branagh","Brendan Gleeson","Imelda Staunton","Jason Isaacs","Eddie Redmayne",
+    "Johnny Depp","Jude Law","Mads Mikkelsen","Warwick Davis","J.K. Rowling"
   ]},
   starwars: { name:"Star Wars", desc:"Jedi, lightsaber, Yoda…", alias:["star wars","jedi","skywalker","mandalorian"], words:[
     "Luke Skywalker","Darth Vader","Princess Leia","Han Solo","Chewbacca","Yoda","Obi-Wan Kenobi","R2-D2",
@@ -691,31 +694,31 @@ const PACKS = {
     "Kanan Jarrus","Hera Syndulla","Sabine Wren","Chopper","Grand Admiral Thrawn","Luthen Rael","The Grand Inquisitor","Reva",
     "Uncle Owen","Aunt Beru","Greedo","Bib Fortuna","Salacious Crumb","Watto","Sebulba","Shmi Skywalker",
     "Ki-Adi-Mundi","Plo Koon","Kit Fisto","Bail Organa","Porkins","Darth Plagueis","Battle Droids","Droideka",
-    "Super Battle Droid","Imperial Probe Droid","Gonk Droid","Y-wing","A-wing","Star Destroyer","Super Star Destroyer","The Death Star",
-    "Starkiller Base","Slave 1","Razor Crest","Naboo Starfighter","Podracer","Imperial Shuttle","AT-AT Walker","AT-ST",
-    "Speeder Bike","Landspeeder","Sandcrawler","Snowspeeder","The Ghost","Hoth","Endor","Dagobah",
-    "Naboo","Coruscant","Kamino","Geonosis","Mustafar","Kashyyyk","Alderaan","Bespin",
-    "Cloud City","Jakku","Exegol","Crait","Scarif","Jedha","Lothal","Mandalore",
-    "Nevarro","Ryloth","Dathomir","Ahch-To","Canto Bight","Yavin IV","Corellia","Ferrix",
-    "Mos Eisley","Mos Espa","Jabba's Palace","Echo Base","The Jedi Temple","The Galactic Senate","The Sarlacc Pit","The Dune Sea",
-    "The Trash Compactor","Double-Bladed Lightsaber","Crossguard Lightsaber","Darksaber","Blaster","Bowcaster","Thermal Detonator","Proton Torpedo",
-    "Beskar","Kyber Crystal","Holocron","The Death Star Plans","Carbonite","Bacta Tank","Blue Milk","Death Sticks",
-    "Jetpack","Holochess","Jawa","Tusken Raiders","Hutt","Twi'lek","Gungan","Mon Calamari",
-    "Gamorrean Guard","Snowtrooper","Scout Trooper","Death Trooper","Imperial Royal Guard","Rancor","Wampa","Tauntaun",
-    "Bantha","Krayt Dragon","Porg","Purrgil","Womp Rat","Padawan","Youngling","The Jedi Council",
-    "The Rebel Alliance","The Galactic Empire","The First Order","The Resistance","The New Republic","The Separatists","The Trade Federation","Bounty Hunter",
-    "A New Hope","The Empire Strikes Back","Return of the Jedi","The Phantom Menace","Attack of the Clones","Revenge of the Sith","The Force Awakens","The Last Jedi",
-    "The Rise of Skywalker","Rogue One","Solo: A Star Wars Story","The Clone Wars","Star Wars Rebels","Andor","The Book of Boba Fett","The Acolyte",
-    "The Bad Batch","Skeleton Crew","The Dark Side","Order 66","Force Ghost","Force Choke","Force Lightning","Jedi Mind Trick",
-    "Midi-chlorians","Rule of Two","The Kessel Run","Trench Run","Battle of Hoth","Battle of Endor","Duel of the Fates","The Imperial March",
-    "Cantina Band","Life Day","Hyperspace","\"Help me, Obi-Wan Kenobi\"","\"It's a trap!\"","\"Do or do not\"","\"Hello there!\"","\"General Kenobi\"",
-    "\"I am the Senate\"","\"I have the high ground\"","\"This is the way\"","\"I have spoken\"","\"Never tell me the odds\"","\"Chewie, we're home\"","\"These aren't the droids\"","\"Punch it, Chewie!\"",
-    "\"Laugh it up, fuzzball\"","\"I know\"","\"Rebellions are built on hope\"","\"Somehow, Palpatine returned\"","\"Unlimited power!\"","\"Now this is podracing!\"","\"You were the chosen one!\"","\"Use the Force, Luke\"",
-    "\"Let the Wookiee win\"","\"I don't like sand\"","\"A Galaxy Far, Far Away\"","Mark Hamill","Harrison Ford","Carrie Fisher","Ewan McGregor","Hayden Christensen",
-    "Natalie Portman","Samuel L. Jackson","Liam Neeson","Ian McDiarmid","James Earl Jones","Alec Guinness","Billy Dee Williams","Anthony Daniels",
-    "Frank Oz","Daisy Ridley","Adam Driver","John Boyega","Oscar Isaac","Felicity Jones","Diego Luna","Donnie Yen",
-    "Pedro Pascal","Giancarlo Esposito","Katee Sackhoff","Rosario Dawson","Temuera Morrison","Ming-Na Wen","Stellan Skarsgård","Forest Whitaker",
-    "Emilia Clarke","Woody Harrelson","Donald Glover","John Williams","George Lucas","Dave Filoni","Jon Favreau","Peter Cushing"
+    "Super Battle Droid","Imperial Probe Droid","Gonk Droid","Y-wing","A-wing","Star Destroyer","Super Star Destroyer","Starkiller Base",
+    "Slave 1","Razor Crest","Naboo Starfighter","Podracer","Imperial Shuttle","AT-AT Walker","AT-ST","Speeder Bike",
+    "Landspeeder","Sandcrawler","Snowspeeder","The Ghost","Hoth","Endor","Dagobah","Naboo",
+    "Coruscant","Kamino","Geonosis","Mustafar","Kashyyyk","Alderaan","Bespin","Cloud City",
+    "Jakku","Exegol","Crait","Scarif","Jedha","Lothal","Mandalore","Nevarro",
+    "Ryloth","Dathomir","Ahch-To","Canto Bight","Yavin IV","Corellia","Ferrix","Mos Eisley",
+    "Mos Espa","Jabba's Palace","Echo Base","The Jedi Temple","The Galactic Senate","The Sarlacc Pit","The Dune Sea","The Trash Compactor",
+    "Double-Bladed Lightsaber","Crossguard Lightsaber","Darksaber","Blaster","Bowcaster","Thermal Detonator","Proton Torpedo","Beskar",
+    "Kyber Crystal","Holocron","The Death Star Plans","Carbonite","Bacta Tank","Blue Milk","Death Sticks","Jetpack",
+    "Holochess","Jawa","Tusken Raiders","Hutt","Twi'lek","Gungan","Mon Calamari","Gamorrean Guard",
+    "Snowtrooper","Scout Trooper","Death Trooper","Imperial Royal Guard","Rancor","Wampa","Tauntaun","Bantha",
+    "Krayt Dragon","Porg","Purrgil","Womp Rat","Padawan","Youngling","The Jedi Council","The Rebel Alliance",
+    "The Galactic Empire","The First Order","The Resistance","The New Republic","The Separatists","The Trade Federation","Bounty Hunter","A New Hope",
+    "The Empire Strikes Back","Return of the Jedi","The Phantom Menace","Attack of the Clones","Revenge of the Sith","The Force Awakens","The Last Jedi","The Rise of Skywalker",
+    "Rogue One","Solo: A Star Wars Story","The Clone Wars","Star Wars Rebels","Andor","The Book of Boba Fett","The Acolyte","The Bad Batch",
+    "Skeleton Crew","The Dark Side","Order 66","Force Ghost","Force Choke","Force Lightning","Jedi Mind Trick","Midi-chlorians",
+    "Rule of Two","The Kessel Run","Trench Run","Battle of Hoth","Battle of Endor","Duel of the Fates","The Imperial March","Cantina Band",
+    "Life Day","Hyperspace","\"Help me, Obi-Wan Kenobi\"","\"It's a trap!\"","\"Do or do not\"","\"Hello there!\"","\"General Kenobi\"","\"I am the Senate\"",
+    "\"I have the high ground\"","\"This is the way\"","\"I have spoken\"","\"Never tell me the odds\"","\"Chewie, we're home\"","\"These aren't the droids\"","\"Punch it, Chewie!\"","\"Laugh it up, fuzzball\"",
+    "\"I know\"","\"Rebellions are built on hope\"","\"Somehow, Palpatine returned\"","\"Unlimited power!\"","\"Now this is podracing!\"","\"You were the chosen one!\"","\"Use the Force, Luke\"","\"Let the Wookiee win\"",
+    "\"I don't like sand\"","\"A Galaxy Far, Far Away\"","Mark Hamill","Harrison Ford","Carrie Fisher","Ewan McGregor","Hayden Christensen","Natalie Portman",
+    "Samuel L. Jackson","Liam Neeson","Ian McDiarmid","James Earl Jones","Alec Guinness","Billy Dee Williams","Anthony Daniels","Frank Oz",
+    "Daisy Ridley","Adam Driver","John Boyega","Oscar Isaac","Felicity Jones","Diego Luna","Donnie Yen","Pedro Pascal",
+    "Giancarlo Esposito","Katee Sackhoff","Rosario Dawson","Temuera Morrison","Ming-Na Wen","Stellan Skarsgård","Forest Whitaker","Emilia Clarke",
+    "Woody Harrelson","Donald Glover","John Williams","George Lucas","Dave Filoni","Jon Favreau","Peter Cushing"
   ]},
   marvel: { name:"Marvel", desc:"Avengers, Thanos…", alias:["marvel","avengers","mcu","superhero","spiderman","spider-man"], words:[
     "Iron Man","Captain America","Thor","Hulk","Black Widow","Hawkeye","Spider-Man","Doctor Strange",
@@ -745,18 +748,17 @@ const PACKS = {
     "Bifrost","Helicarrier","The Milano","Iron Spider Suit","Hulkbuster","Yaka Arrow","Cerebro","Asgard",
     "Knowhere","Sakaar","Vormir","Titan","Xandar","Sokovia","Madripoor","Kamar-Taj",
     "Stark Tower","Avengers Compound","Sanctum Sanctorum","New Asgard","Hell's Kitchen","Genosha","X-Mansion","Latveria",
-    "Ta Lo","Quantum Realm","Avengers","Guardians of the Galaxy","Fantastic Four","S.H.I.E.L.D.","Hydra","Thunderbolts",
-    "Illuminati","Dora Milaje","Ravagers","Sinister Six","Brotherhood of Mutants","Nova Corps","Chitauri","Black Order",
-    "Ebony Maw","Corvus Glaive","Proxima Midnight","TVA","Skrulls","Age of Ultron","Infinity War","Endgame",
-    "Civil War","Captain America: The Winter Soldier","Thor: Ragnarok","No Way Home","Homecoming","Far From Home","The First Avenger","Into the Spider-Verse",
-    "Across the Spider-Verse","Logan","Days of Future Past","Deadpool & Wolverine","Multiverse of Madness","Quantumania","The Marvels","The Incredible Hulk",
-    "Love and Thunder","\"I am Iron Man\"","\"I can do this all day\"","\"I love you 3000\"","\"Hulk smash\"","\"Puny god\"","\"I am inevitable\"","\"On your left\"",
-    "\"Wakanda Forever\"","Robert Downey Jr.","Chris Evans","Chris Hemsworth","Scarlett Johansson","Mark Ruffalo","Jeremy Renner","Tom Holland",
-    "Tom Hiddleston","Samuel L. Jackson","Chadwick Boseman","Chris Pratt","Zoe Saldana","Dave Bautista","Vin Diesel","Bradley Cooper",
-    "Benedict Cumberbatch","Elizabeth Olsen","Paul Rudd","Brie Larson","Hugh Jackman","Ryan Reynolds","Patrick Stewart","Ian McKellen",
-    "Tobey Maguire","Andrew Garfield","Josh Brolin","Stan Lee","Kevin Feige","Letitia Wright","Michael B. Jordan","The Blip",
-    "The Multiverse","Super Soldier Serum","Gamma Radiation","Symbiote","Daily Bugle","Oscorp","Stark Industries","Baxter Building",
-    "What If...?"
+    "Ta Lo","Quantum Realm","Guardians of the Galaxy","Fantastic Four","S.H.I.E.L.D.","Hydra","Thunderbolts","Illuminati",
+    "Dora Milaje","Ravagers","Sinister Six","Brotherhood of Mutants","Nova Corps","Chitauri","Black Order","Ebony Maw",
+    "Corvus Glaive","Proxima Midnight","TVA","Skrulls","Age of Ultron","Infinity War","Endgame","Civil War",
+    "Captain America: The Winter Soldier","Thor: Ragnarok","No Way Home","Homecoming","Far From Home","The First Avenger","Into the Spider-Verse","Across the Spider-Verse",
+    "Logan","Days of Future Past","Deadpool & Wolverine","Multiverse of Madness","Quantumania","The Marvels","The Incredible Hulk","Love and Thunder",
+    "\"I am Iron Man\"","\"I can do this all day\"","\"I love you 3000\"","\"Hulk smash\"","\"Puny god\"","\"I am inevitable\"","\"On your left\"","\"Wakanda Forever\"",
+    "Robert Downey Jr.","Chris Evans","Chris Hemsworth","Scarlett Johansson","Mark Ruffalo","Jeremy Renner","Tom Holland","Tom Hiddleston",
+    "Samuel L. Jackson","Chadwick Boseman","Chris Pratt","Zoe Saldana","Dave Bautista","Vin Diesel","Bradley Cooper","Benedict Cumberbatch",
+    "Elizabeth Olsen","Paul Rudd","Brie Larson","Hugh Jackman","Ryan Reynolds","Patrick Stewart","Ian McKellen","Tobey Maguire",
+    "Andrew Garfield","Josh Brolin","Stan Lee","Kevin Feige","Letitia Wright","Michael B. Jordan","The Blip","Super Soldier Serum",
+    "Gamma Radiation","Symbiote","Daily Bugle","Oscorp","Stark Industries","Baxter Building","What If...?"
   ]},
   dc: { name:"DC", desc:"Batman, Superman, Gotham…", alias:["dc","dc comics","batman","superman","justice league","gotham","dceu"], words:[
     "Batman","Superman","Wonder Woman","Aquaman","The Flash","Green Lantern","Cyborg","Shazam",
@@ -1146,39 +1148,38 @@ const PACKS = {
     "Top Gun","Indiana Jones","Batman","Joker","Superman","Wonder Woman","Aquaman","The Flash",
     "popcorn","movie trailer","red carpet","Oscar award","The Godfather","Avengers: Endgame","Iron Man","Spider-Man",
     "Black Panther","Star Wars","Harry Potter","The Lord of the Rings","The Matrix","Inception","Interstellar","The Dark Knight",
-    "Forrest Gump","The Shawshank Redemption","Pulp Fiction","Fight Club","Gladiator","Ghostbusters","Mrs. Doubtfire","The Terminator",
-    "Rambo","Die Hard","Pirates of the Caribbean","The Mummy","Independence Day","Armageddon","2012","The Day After Tomorrow",
-    "Speed","Ghost","Pretty Woman","Notting Hill","Love Actually","The Notebook","A Walk to Remember","Dirty Dancing",
-    "Grease","La La Land","The Greatest Showman","Mamma Mia!","Pitch Perfect","Mean Girls","Legally Blonde","The Devil Wears Prada",
-    "Crazy Rich Asians","50 First Dates","The Fault in Our Stars","Twilight","The Hunger Games","Slumdog Millionaire","Life of Pi","Parasite",
-    "Train to Busan","The Karate Kid","The Truman Show","Dead Poets Society","Wicked","Dune","Venom","Ant-Man",
-    "Night at the Museum","Jumanji","The Mask","Ace Ventura","Matilda","The Chronicles of Narnia","Percy Jackson","Alice in Wonderland",
-    "The Wizard of Oz","The Sound of Music","Mary Poppins","The Parent Trap","The Princess Diaries","High School Musical","Miss Congeniality","The Proposal",
-    "Bruce Almighty","Liar Liar","Anaconda","Free Willy","Hachiko","The Passion of the Christ","Sister Act","The Bodyguard",
-    "X-Men","Deadpool","Wolverine","Guardians of the Galaxy","Doctor Strange","Thor","Captain America","The Conjuring",
-    "Annabelle","Insidious","Saw","Final Destination","Scream","A Nightmare on Elm Street","Friday the 13th","Chucky",
-    "IT","The Exorcist","The Ring","The Grudge","Get Out","A Quiet Place","Bird Box","World War Z",
-    "The Nun","M3GAN","Harley Quinn","Darth Vader","Yoda","Luke Skywalker","Hermione Granger","Voldemort",
-    "Dumbledore","Gandalf","Gollum","Frodo","Gru","Donkey","Woody","Buzz Lightyear",
-    "Elsa","Olaf","Simba","Mufasa","Nemo","Dory","Moana","Maui",
-    "Stitch","Baymax","Lightning McQueen","Jack Sparrow","Hannibal Lecter","Katniss Everdeen","Edward Cullen","Thanos",
-    "Groot","Pennywise","Freddy Krueger","Michael Myers","Ghostface","Optimus Prime","Willy Wonka","Ken",
-    "Lara Croft","Maleficent","Cruella","Genie","Mulan","Cinderella","Snow White","Peter Pan",
-    "Toy Story","Finding Nemo","Frozen","The Lion King","Up","Inside Out","Coco","Encanto",
-    "Ratatouille","Monsters Inc.","The Incredibles","Cars","Zootopia","Big Hero 6","How to Train Your Dragon","Madagascar",
-    "Ice Age","Despicable Me","Aladdin","Beauty and the Beast","The Little Mermaid","Spirited Away","Your Name","Wall-E",
-    "\"Use the Force, Luke\"","\"I am your father\"","\"Houston, we have a problem\"","\"You talking to me?\"","\"You can't handle the truth!\"","\"King of the world!\"","\"You shall not pass!\"","\"Why so serious?\"",
-    "\"I am Iron Man\"","\"Avengers, assemble!\"","\"Hasta la vista, baby\"","\"Bond. James Bond.\"","\"My precious\"","\"Just keep swimming\"","\"To infinity and beyond!\"","\"Let It Go\"",
-    "\"Hakuna Matata\"","\"Run, Forrest, run!\"","\"You're a wizard, Harry\"","\"I see dead people\"","Scarface","\"Here's Johnny!\"","\"E.T. phone home\"","\"Wakanda Forever\"",
-    "\"I love you 3000\"","\"I am Groot\"","\"This is Sparta!\"","\"Wax on, wax off\"","\"Walang himala!\"","Schindler's List","The Silence of the Lambs","A Beautiful Mind",
-    "The Pursuit of Happyness","Bohemian Rhapsody","The Social Network","Everything Everywhere All at Once","Kill Bill","The Revenant","The Sixth Sense","Django Unchained",
-    "plot twist","sequel","prequel","trilogy","box office","blockbuster","spoiler","post-credits scene",
-    "cameo","stuntman","director","Academy Awards","Hollywood","paparazzi","movie premiere","3D glasses",
-    "IMAX","film festival","bloopers","CGI","green screen","slow motion","jump scare","rom-com",
-    "happy ending","Hello Love Goodbye","Four Sisters and a Wedding","Heneral Luna","One More Chance","Kita Kita","That Thing Called Tadhana","Starting Over Again",
-    "A Very Special Love","The Hows of Us","Seven Sundays","Ang Tanging Ina","Enteng Kabisote","Shake Rattle and Roll","Feng Shui","Sukob",
-    "Himala","Jose Rizal","Goyo: The Boy General","Anak","Praybeyt Benjamin","Rewind","She's Dating the Gangster","No Other Woman",
-    "\"Second-rate, trying hard, copycat!\""
+    "Forrest Gump","The Shawshank Redemption","Pulp Fiction","Fight Club","Gladiator","Ghostbusters","Mrs. Doubtfire","Rambo",
+    "Die Hard","Pirates of the Caribbean","The Mummy","Independence Day","Armageddon","2012","The Day After Tomorrow","Speed",
+    "Ghost","Pretty Woman","Notting Hill","Love Actually","The Notebook","A Walk to Remember","Dirty Dancing","Grease",
+    "La La Land","The Greatest Showman","Mamma Mia!","Pitch Perfect","Mean Girls","Legally Blonde","The Devil Wears Prada","Crazy Rich Asians",
+    "50 First Dates","The Fault in Our Stars","Twilight","The Hunger Games","Slumdog Millionaire","Life of Pi","Parasite","Train to Busan",
+    "The Karate Kid","The Truman Show","Dead Poets Society","Wicked","Dune","Venom","Ant-Man","Night at the Museum",
+    "Jumanji","The Mask","Ace Ventura","Matilda","The Chronicles of Narnia","Percy Jackson","Alice in Wonderland","The Wizard of Oz",
+    "The Sound of Music","Mary Poppins","The Parent Trap","The Princess Diaries","High School Musical","Miss Congeniality","The Proposal","Bruce Almighty",
+    "Liar Liar","Anaconda","Free Willy","Hachiko","The Passion of the Christ","Sister Act","The Bodyguard","X-Men",
+    "Deadpool","Wolverine","Guardians of the Galaxy","Doctor Strange","Thor","Captain America","The Conjuring","Annabelle",
+    "Insidious","Saw","Final Destination","Scream","A Nightmare on Elm Street","Friday the 13th","Chucky","IT",
+    "The Exorcist","The Ring","The Grudge","Get Out","A Quiet Place","Bird Box","World War Z","The Nun",
+    "M3GAN","Harley Quinn","Darth Vader","Yoda","Luke Skywalker","Hermione Granger","Voldemort","Dumbledore",
+    "Gandalf","Gollum","Frodo","Gru","Donkey","Woody","Buzz Lightyear","Elsa",
+    "Olaf","Simba","Mufasa","Nemo","Dory","Moana","Maui","Stitch",
+    "Baymax","Lightning McQueen","Jack Sparrow","Hannibal Lecter","Katniss Everdeen","Edward Cullen","Thanos","Groot",
+    "Pennywise","Freddy Krueger","Michael Myers","Ghostface","Optimus Prime","Willy Wonka","Ken","Lara Croft",
+    "Maleficent","Cruella","Genie","Mulan","Cinderella","Snow White","Peter Pan","Toy Story",
+    "Finding Nemo","Frozen","The Lion King","Up","Inside Out","Coco","Encanto","Ratatouille",
+    "Monsters Inc.","The Incredibles","Cars","Zootopia","Big Hero 6","How to Train Your Dragon","Madagascar","Ice Age",
+    "Despicable Me","Aladdin","Beauty and the Beast","The Little Mermaid","Spirited Away","Your Name","Wall-E","\"Use the Force, Luke\"",
+    "\"I am your father\"","\"Houston, we have a problem\"","\"You talking to me?\"","\"You can't handle the truth!\"","\"King of the world!\"","\"You shall not pass!\"","\"Why so serious?\"","\"I am Iron Man\"",
+    "\"Avengers, assemble!\"","\"Hasta la vista, baby\"","\"Bond. James Bond.\"","\"My precious\"","\"Just keep swimming\"","\"To infinity and beyond!\"","\"Let It Go\"","\"Hakuna Matata\"",
+    "\"Run, Forrest, run!\"","\"You're a wizard, Harry\"","\"I see dead people\"","Scarface","\"Here's Johnny!\"","\"E.T. phone home\"","\"Wakanda Forever\"","\"I love you 3000\"",
+    "\"I am Groot\"","\"This is Sparta!\"","\"Wax on, wax off\"","\"Walang himala!\"","Schindler's List","The Silence of the Lambs","A Beautiful Mind","The Pursuit of Happyness",
+    "Bohemian Rhapsody","The Social Network","Everything Everywhere All at Once","Kill Bill","The Revenant","The Sixth Sense","Django Unchained","plot twist",
+    "sequel","prequel","trilogy","box office","blockbuster","spoiler","post-credits scene","cameo",
+    "stuntman","director","Academy Awards","Hollywood","paparazzi","movie premiere","3D glasses","IMAX",
+    "film festival","bloopers","CGI","green screen","slow motion","jump scare","rom-com","happy ending",
+    "Hello Love Goodbye","Four Sisters and a Wedding","Heneral Luna","One More Chance","Kita Kita","That Thing Called Tadhana","Starting Over Again","A Very Special Love",
+    "The Hows of Us","Seven Sundays","Ang Tanging Ina","Enteng Kabisote","Shake Rattle and Roll","Feng Shui","Sukob","Himala",
+    "Jose Rizal","Goyo: The Boy General","Anak","Praybeyt Benjamin","Rewind","She's Dating the Gangster","No Other Woman","\"Second-rate, trying hard, copycat!\""
   ]}
 };
 const HALO = { name:"Halo-Halo Mix", desc:"everything, all mixed up!", words: Object.values(BANKS).flatMap(b=>b.words) };
@@ -1303,9 +1304,19 @@ async function armTilt(){
     }
   }catch(e){}
 }
+let tiltSeen=false;
 function onTilt(e){
-  if(e.beta==null||e.gamma==null||!$("play").classList.contains("on"))return;
+  if(e.beta==null||e.gamma==null)return;
+  tiltSeen=true;
   const rad=Math.PI/180;
+  // gravity along the device x-axis: which way is the phone turned sideways?
+  const gx=Math.cos(e.beta*rad)*Math.sin(e.gamma*rad);
+  const de=document.documentElement;
+  if(de.classList.contains("rot")){
+    if(gx>0.55)de.classList.add("flip");
+    else if(gx<-0.55)de.classList.remove("flip");
+  }
+  if(!$("play").classList.contains("on"))return;
   // z-component of the screen normal: +1 screen faces the ceiling, -1 the floor,
   // ~0 upright on the forehead — holds in portrait AND landscape grips
   const f=Math.cos(e.beta*rad)*Math.cos(e.gamma*rad);
@@ -1318,14 +1329,52 @@ function onTilt(e){
   }
 }
 
+/* ---------- touch fallback: works even when motion access is denied ---------- */
+let lastTap=0, pressTimer=null;
+$("play").addEventListener("touchstart",e=>{
+  if(e.target.closest(".exit"))return;
+  pressTimer=setTimeout(()=>{pressTimer=null;mark(false);},600); // long-press = pass
+});
+$("play").addEventListener("touchend",e=>{
+  if(e.target.closest(".exit"))return;
+  if(pressTimer){clearTimeout(pressTimer);pressTimer=null;}
+  const now=performance.now();
+  if(now-lastTap<350){lastTap=0;mark(true);} // double-tap = got it
+  else lastTap=now;
+});
+$("play").addEventListener("dblclick",e=>{ if(!e.target.closest(".exit"))mark(true); });
+
 function shuffle(a){
   a=a.slice();
   for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
   return a;
 }
+
+/* ---------- seen-word memory: no repeats across game nights ---------- */
+const LS_SEEN="ph_seen";
+let seenWords={};
+try{seenWords=JSON.parse(localStorage.getItem(LS_SEEN)||"{}")||{};}catch(e){}
+function buildDeck(key){
+  const bank=bankFor(key).words;
+  const s=new Set(seenWords[key]||[]);
+  let unseen=bank.filter(w=>!s.has(w.toLowerCase()));
+  // deck nearly exhausted: start a fresh cycle for this category
+  if(unseen.length<Math.min(20,bank.length)){seenWords[key]=[];unseen=bank.slice();}
+  return shuffle(unseen);
+}
+function rememberWord(key,w){
+  (seenWords[key]=seenWords[key]||[]).push(w.toLowerCase());
+}
+function saveSeen(){
+  try{
+    if(currentKey)seenWords[currentKey]=[...new Set(seenWords[currentKey]||[])];
+    localStorage.setItem(LS_SEEN,JSON.stringify(seenWords));
+  }catch(e){}
+}
+
 function startCountdown(){
   beep(660,.1,.15); // unlock audio on the tap
-  deck=shuffle(bankFor(currentKey).words);deckPos=0;
+  deck=buildDeck(currentKey);deckPos=0;
   results=[];score=0;
   show("count");
   let n=3;
@@ -1347,7 +1396,9 @@ async function grabWakeLock(){
 }
 function nextWord(){
   if(deckPos>=deck.length){deck=shuffle(deck);deckPos=0;}
-  $("word").textContent=deck[deckPos++];
+  const w=deck[deckPos++];
+  rememberWord(currentKey,w);
+  $("word").textContent=w;
 }
 function fmt(s){ return Math.floor(s/60)+":"+String(s%60).padStart(2,"0"); }
 function startRound(){
@@ -1355,6 +1406,13 @@ function startRound(){
   $("clock").textContent=fmt(timeLeft);
   $("tbar").style.width="100%";
   $("scoreChip").textContent="0 correct";
+  $("tiltHint").textContent="Tilt down = got it · Tilt up = pass";
+  tiltSeen=false;
+  // no motion events? surface the touch fallback so nobody gets stuck
+  setTimeout(()=>{
+    if(!tiltSeen&&$("play").classList.contains("on"))
+      $("tiltHint").textContent="Double-tap = got it · Long-press = pass";
+  },2500);
   nextWord();
   show("play");
   grabWakeLock();
@@ -1383,12 +1441,14 @@ function mark(ok){
 $("exitBtn").onclick=()=>{
   clearInterval(timerId);timerId=null;
   if(wakeLock){wakeLock.release().catch(()=>{});wakeLock=null;}
+  saveSeen();
   buildHome();show("home");
 };
 
 function endRound(){
   clearInterval(timerId);timerId=null;
   if(wakeLock){wakeLock.release().catch(()=>{});wakeLock=null;}
+  saveSeen();
   beep(220,.5,.3);buzz(400);
   $("finalScore").textContent=score;
   const wl=$("wordlist");wl.innerHTML="";
