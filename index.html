@@ -149,28 +149,26 @@
   .timerbar{height:10px;background:rgba(0,0,0,.25);flex:none}
   .timerbar i{display:block;height:100%;background:var(--sun);transition:width .25s linear}
   .hud{
-    display:flex;justify-content:space-between;align-items:center;
-    padding:10px 124px 0;font-weight:800;flex:none;
+    display:flex;justify-content:space-between;align-items:center;gap:12px;
+    padding:10px 18px 0;font-weight:800;flex:none;
   }
   .hud .clock{font-size:30px;font-variant-numeric:tabular-nums}
   .hud .score{font-size:15px;background:rgba(0,0,0,.22);border-radius:999px;padding:6px 14px}
-  .wordzone{flex:1;display:flex;align-items:center;justify-content:center;padding:0 124px;min-height:0}
+  .exit{
+    border:none;background:rgba(0,0,0,.22);color:var(--white);cursor:pointer;
+    width:40px;height:40px;border-radius:999px;font-size:18px;font-weight:900;line-height:1;
+  }
+  .exit:active{background:rgba(0,0,0,.4)}
+  .wordzone{flex:1;display:flex;align-items:center;justify-content:center;padding:0 28px;min-height:0}
   .word{
     font-weight:900;text-transform:uppercase;text-align:center;
     font-size:clamp(34px,26vmin,96px);line-height:1.02;letter-spacing:-.01em;
     text-wrap:balance;overflow-wrap:anywhere;
   }
-  .paddles{position:fixed;inset:0;display:flex;justify-content:space-between;pointer-events:none;z-index:5}
-  .paddle{
-    pointer-events:auto;flex:none;width:108px;height:100%;
-    border:none;border-radius:0;cursor:pointer;
-    font-weight:900;font-size:18px;letter-spacing:.05em;text-transform:uppercase;
-    color:var(--white);
+  .tilthint{
+    flex:none;text-align:center;font-size:13px;font-weight:700;letter-spacing:.08em;
+    text-transform:uppercase;opacity:.55;padding:0 20px 16px;
   }
-  .paddle:active{filter:brightness(1.12)}
-  .paddle.tama{background:var(--green)}
-  .paddle.pass{background:var(--orange)}
-  .paddle small{display:block;font-size:10px;font-weight:700;opacity:.85;letter-spacing:.1em}
 
   /* RESULTS */
   #results{background:var(--sun)}
@@ -261,8 +259,7 @@
   <div class="catname" id="readyCat"></div>
   <p class="howto">Hold the phone on the <b>guesser's forehead</b>, word facing the group. The group may only answer:</p>
   <div class="answers"><span>YES</span><span>NO</span><span>MAYBE</span></div>
-  <p class="howto" style="margin-top:14px">Guessed it? <b>Tilt the phone DOWN</b> = Got it!<br>Stuck? <b>Tilt UP</b> = Pass. (Or tap the buttons.)</p>
-  <button class="chip" id="tiltToggle" style="flex:none;align-self:center;padding:10px 22px;margin-top:2px">Tilt to answer: ON</button>
+  <p class="howto" style="margin-top:14px">Guessed it? <b>Tilt the phone DOWN</b> = Got it!<br>Stuck? <b>Tilt UP</b> = Pass.</p>
   <div style="flex:1"></div>
   <button class="btn primary" id="goBtn" style="font-size:20px;padding:14px">Ready — GO!</button>
   <button class="btn ghost" id="readyBack" style="margin-top:8px;padding:9px;font-size:14px;background:transparent;color:var(--white);border-color:rgba(255,253,245,.5);box-shadow:none">Back</button>
@@ -275,14 +272,12 @@
 <div class="screen" id="play">
   <div class="timerbar"><i id="tbar" style="width:100%"></i></div>
   <div class="hud">
+    <button class="exit" id="exitBtn" aria-label="Back to menu">&#10005;</button>
     <div class="score" id="scoreChip">0 correct</div>
     <div class="clock" id="clock">1:30</div>
   </div>
   <div class="wordzone"><div class="word" id="word"></div></div>
-  <div class="paddles">
-    <button class="paddle pass" id="passBtn">Pass<small>next word</small></button>
-    <button class="paddle tama" id="tamaBtn">Got it!<small>guessed right!</small></button>
-  </div>
+  <div class="tilthint">Tilt down = got it &middot; Tilt up = pass</div>
 </div>
 
 <!-- RESULTS -->
@@ -1244,21 +1239,8 @@ $("readyBack").onclick=()=>show("home");
 $("goBtn").onclick=()=>{armTilt();startCountdown();};
 
 /* ---------- tilt controls ---------- */
-const LS_TILT="ph_tilt";
-let tiltOn = localStorage.getItem(LS_TILT)!=="off";
 let tiltListening=false, tiltNeutral=false, tiltCooldown=0;
-function updateTiltBtn(){
-  $("tiltToggle").textContent="Tilt to answer: "+(tiltOn?"ON":"OFF");
-  $("tiltToggle").classList.toggle("sel",tiltOn);
-}
-$("tiltToggle").onclick=()=>{
-  tiltOn=!tiltOn;
-  localStorage.setItem(LS_TILT,tiltOn?"on":"off");
-  updateTiltBtn();
-};
-updateTiltBtn();
 async function armTilt(){
-  if(!tiltOn)return;
   try{
     // iOS asks for motion permission; must be triggered by the GO tap
     if(typeof DeviceOrientationEvent!=="undefined" && DeviceOrientationEvent.requestPermission){
@@ -1272,7 +1254,7 @@ async function armTilt(){
   }catch(e){}
 }
 function onTilt(e){
-  if(!tiltOn||e.beta==null||e.gamma==null||!$("play").classList.contains("on"))return;
+  if(e.beta==null||e.gamma==null||!$("play").classList.contains("on"))return;
   const rad=Math.PI/180;
   // z-component of the screen normal: +1 screen faces the ceiling, -1 the floor,
   // ~0 upright on the forehead — holds in portrait AND landscape grips
@@ -1348,8 +1330,11 @@ function mark(ok){
   $("scoreChip").textContent=score+" correct";
   nextWord();
 }
-$("tamaBtn").onclick=()=>mark(true);
-$("passBtn").onclick=()=>mark(false);
+$("exitBtn").onclick=()=>{
+  clearInterval(timerId);timerId=null;
+  if(wakeLock){wakeLock.release().catch(()=>{});wakeLock=null;}
+  buildHome();show("home");
+};
 
 function endRound(){
   clearInterval(timerId);timerId=null;
