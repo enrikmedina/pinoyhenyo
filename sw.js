@@ -1,5 +1,5 @@
 // Network-first with cache fallback: always fresh online, fully playable offline.
-const CACHE = "pinoyhenyo-v1";
+const CACHE = "pinoyhenyo-v2";
 const PRECACHE = ["./", "./index.html", "./icon-192.png", "./icon-512.png", "./manifest.webmanifest"];
 
 self.addEventListener("install", e => {
@@ -18,8 +18,10 @@ self.addEventListener("activate", e => {
 
 self.addEventListener("fetch", e => {
   if (e.request.method !== "GET" || !e.request.url.startsWith(self.location.origin)) return;
+  // no-cache: revalidate with the server (ETag) instead of trusting the
+  // HTTP cache, so a fresh deploy shows up on the very next launch
   e.respondWith(
-    fetch(e.request)
+    fetch(e.request, { cache: "no-cache" })
       .then(res => {
         const copy = res.clone();
         caches.open(CACHE).then(c => c.put(e.request, copy));
