@@ -1,6 +1,14 @@
 <meta charset="utf-8">
 <title>Pinoy Henyo</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#FFC933">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Pinoy Henyo">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" type="image/png" href="icon-192.png">
 <style>
   :root{
     --sun:#FFC933;
@@ -651,6 +659,10 @@ function endRound(){
 }
 $("againBtn").onclick=startCountdown;
 $("homeBtn").onclick=()=>{buildHome();show("home");};
+
+/* ---------- PWA ---------- */
+// no-op where unsupported or where sw.js isn't served (e.g. artifact preview)
+if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
 
 /* ---------- forced landscape ---------- */
 function updateOrient(){
