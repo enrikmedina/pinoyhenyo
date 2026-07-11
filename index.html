@@ -1,0 +1,638 @@
+<title>Pinoy Henyo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<style>
+  :root{
+    --sun:#FFC933;
+    --sun-deep:#F5B70A;
+    --ink:#1A2B7A;
+    --ink-deep:#12205E;
+    --red:#E03A2F;
+    --white:#FFFDF5;
+    --green:#1FA84C;
+    --orange:#FF8A00;
+    --shadow:0 4px 0 rgba(18,32,94,.28);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:var(--sun);
+    color:var(--ink);
+    overflow:hidden;
+    user-select:none;
+    -webkit-user-select:none;
+  }
+  .screen{
+    position:fixed;inset:0;
+    display:none;
+    flex-direction:column;
+    padding:max(16px,env(safe-area-inset-top)) 20px max(20px,env(safe-area-inset-bottom));
+  }
+  .screen.on{display:flex}
+
+  /* banderitas */
+  .bandera{
+    height:26px;flex:none;
+    background-image:
+      conic-gradient(from -63deg at 50% 0,transparent 0 116deg,var(--red) 0 244deg,transparent 0);
+    background-size:34px 22px;
+    background-repeat:repeat-x;
+  }
+  .bandera.b2{background-image:conic-gradient(from -63deg at 50% 0,transparent 0 116deg,var(--ink) 0 244deg,transparent 0);background-position:17px 0;margin-top:-22px}
+  .bandera-wrap{flex:none;margin:0 -20px 8px;filter:drop-shadow(0 2px 0 rgba(18,32,94,.15))}
+
+  h1.logo{
+    font-size:clamp(44px,13vw,64px);
+    font-weight:900;
+    text-transform:uppercase;
+    letter-spacing:-.02em;
+    line-height:.9;
+    margin:10px 0 2px;
+    text-wrap:balance;
+  }
+  h1.logo .accent{color:var(--red)}
+  .tagline{
+    font-size:14px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    margin:0 0 18px;opacity:.75;
+  }
+
+  .label{
+    font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+    margin:14px 0 8px;opacity:.7;
+  }
+
+  .search{
+    width:100%;padding:13px 16px;
+    border:2px solid var(--ink);border-radius:999px;background:var(--white);
+    font:700 16px inherit;color:var(--ink);
+    box-shadow:var(--shadow);
+  }
+  .search::placeholder{color:var(--ink);opacity:.4;font-weight:600}
+  .search:focus{outline:3px solid var(--red);outline-offset:2px}
+  .grid-label{grid-column:1/-1;font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;opacity:.7;margin:8px 0 -2px}
+  .nores{
+    grid-column:1/-1;background:var(--white);border:2px dashed var(--ink);border-radius:14px;
+    padding:16px;font-size:14px;font-weight:600;line-height:1.5;
+  }
+  .nores b{color:var(--red)}
+
+  .cats{
+    display:grid;grid-template-columns:1fr 1fr;gap:10px;
+    overflow-y:auto;flex:1;align-content:start;padding-bottom:8px;
+  }
+  .cat{
+    background:var(--white);
+    border:2px solid var(--ink);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+    padding:14px 12px 12px;
+    font-weight:800;font-size:16px;color:var(--ink);
+    text-align:left;cursor:pointer;
+    display:flex;flex-direction:column;gap:2px;
+    transition:transform .06s;
+  }
+  .cat:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(18,32,94,.28)}
+  .cat small{font-weight:600;font-size:11.5px;opacity:.6;letter-spacing:.02em}
+  .cat.custom{background:var(--ink);color:var(--white);border-color:var(--ink-deep)}
+  .cat.custom small{opacity:.75}
+
+  .chips{display:flex;gap:8px}
+  .chip{
+    flex:1;padding:10px 0;border-radius:999px;
+    border:2px solid var(--ink);background:var(--white);
+    font-weight:800;font-size:14px;color:var(--ink);cursor:pointer;
+  }
+  .chip.sel{background:var(--ink);color:var(--white)}
+
+  .btn{
+    border:2px solid var(--ink-deep);
+    border-radius:16px;
+    font-weight:900;font-size:19px;letter-spacing:.04em;text-transform:uppercase;
+    padding:16px;cursor:pointer;
+    box-shadow:var(--shadow);
+    transition:transform .06s;
+  }
+  .btn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(18,32,94,.28)}
+  .btn.primary{background:var(--red);color:var(--white);border-color:#B02A22;box-shadow:0 4px 0 #8E1F19}
+  .btn.primary:active{box-shadow:0 1px 0 #8E1F19}
+  .btn.ghost{background:var(--white);color:var(--ink)}
+  .btn:focus-visible,.cat:focus-visible,.chip:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+
+  /* READY screen */
+  #ready{background:var(--ink);color:var(--white);text-align:center;justify-content:center;gap:8px}
+  #ready .catname{font-size:clamp(34px,10vw,52px);font-weight:900;text-transform:uppercase;letter-spacing:-.01em;line-height:1;margin:6px 0;color:var(--sun)}
+  #ready .howto{font-size:16px;line-height:1.55;max-width:30ch;margin:6px auto 24px;opacity:.9}
+  #ready .howto b{color:var(--sun)}
+  .answers{display:flex;gap:8px;justify-content:center;margin:2px 0 6px}
+  .answers span{border:2px solid rgba(255,253,245,.5);border-radius:999px;padding:6px 16px;font-weight:800;font-size:14px;letter-spacing:.08em}
+  #ready .chip{background:transparent;color:var(--white);border-color:rgba(255,253,245,.5)}
+  #ready .chip.sel{background:var(--sun);color:var(--ink);border-color:var(--sun)}
+
+  /* COUNTDOWN */
+  #count{background:var(--ink);color:var(--sun);align-items:center;justify-content:center}
+  #count .num{font-size:38vw;font-weight:900;line-height:1}
+
+  /* PLAY screen */
+  #play{background:var(--ink);color:var(--white);padding:0}
+  #play.flash-tama{background:var(--green)}
+  #play.flash-pass{background:var(--orange)}
+  .timerbar{height:10px;background:rgba(0,0,0,.25);flex:none}
+  .timerbar i{display:block;height:100%;background:var(--sun);transition:width .25s linear}
+  .hud{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:calc(10px + env(safe-area-inset-top)) 18px 0;font-weight:800;flex:none;
+  }
+  .hud .clock{font-size:34px;font-variant-numeric:tabular-nums}
+  .hud .score{font-size:15px;background:rgba(0,0,0,.22);border-radius:999px;padding:6px 14px}
+  .wordzone{flex:1;display:flex;align-items:center;justify-content:center;padding:0 14px;min-height:0}
+  .word{
+    font-weight:900;text-transform:uppercase;text-align:center;
+    font-size:clamp(40px,14vw,96px);line-height:1.02;letter-spacing:-.01em;
+    text-wrap:balance;overflow-wrap:anywhere;
+  }
+  .paddles{display:flex;gap:10px;padding:0 14px calc(14px + env(safe-area-inset-bottom));flex:none}
+  .paddle{
+    flex:1;border:none;border-radius:18px;cursor:pointer;
+    font-weight:900;font-size:24px;letter-spacing:.05em;text-transform:uppercase;
+    padding:26px 0;color:var(--white);
+  }
+  .paddle:active{filter:brightness(1.12)}
+  .paddle.tama{background:var(--green);box-shadow:0 5px 0 #12662E}
+  .paddle.pass{background:var(--orange);box-shadow:0 5px 0 #A85A00}
+  .paddle small{display:block;font-size:12px;font-weight:700;opacity:.85;letter-spacing:.1em}
+
+  /* RESULTS */
+  #results{background:var(--sun)}
+  #results h2{font-size:clamp(34px,10vw,48px);font-weight:900;text-transform:uppercase;margin:8px 0 0;line-height:1}
+  .bigscore{font-size:clamp(64px,24vw,110px);font-weight:900;color:var(--red);line-height:1;margin:4px 0 2px;font-variant-numeric:tabular-nums}
+  .bigscore small{font-size:20px;color:var(--ink);font-weight:800;letter-spacing:.1em}
+  .wordlist{flex:1;overflow-y:auto;margin:12px 0;display:flex;flex-direction:column;gap:6px}
+  .wl{
+    display:flex;justify-content:space-between;align-items:center;
+    background:var(--white);border:2px solid var(--ink);border-radius:12px;
+    padding:10px 14px;font-weight:700;font-size:16px;
+  }
+  .wl .tag{font-size:11px;font-weight:900;letter-spacing:.1em;border-radius:999px;padding:4px 10px;color:var(--white)}
+  .wl .tag.ok{background:var(--green)}
+  .wl .tag.no{background:var(--orange)}
+  .row2{display:flex;gap:10px;flex:none}
+  .row2 .btn{flex:1}
+
+  /* EDITOR */
+  #editor textarea{
+    flex:1;width:100%;resize:none;
+    border:2px solid var(--ink);border-radius:14px;background:var(--white);
+    font:600 17px/1.6 inherit;color:var(--ink);padding:14px;
+    box-shadow:var(--shadow);
+  }
+  #editor textarea:focus{outline:3px solid var(--red);outline-offset:2px}
+  .hint{font-size:13px;opacity:.7;margin:8px 0 14px;line-height:1.5}
+
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important;animation:none !important}
+  }
+  @keyframes pop{from{transform:scale(.6);opacity:.4}to{transform:scale(1);opacity:1}}
+  #count .num.pop{animation:pop .28s ease-out}
+</style>
+
+<!-- HOME -->
+<div class="screen on" id="home">
+  <div class="bandera-wrap"><div class="bandera"></div><div class="bandera b2"></div></div>
+  <h1 class="logo">Pinoy<br><span class="accent">Henyo!</span></h1>
+  <p class="tagline">Yes &middot; No &middot; Maybe</p>
+
+  <div class="label">Time per round</div>
+  <div class="chips" id="timeChips">
+    <button class="chip" data-t="60">1:00</button>
+    <button class="chip sel" data-t="90">1:30</button>
+    <button class="chip" data-t="120">2:00</button>
+  </div>
+
+  <div class="label">Find a topic</div>
+  <input class="search" id="search" type="search" autocomplete="off"
+         placeholder="Try &quot;Lord of the Rings&quot;, &quot;K-pop&quot;, &quot;NBA&quot;…">
+
+  <div class="cats" id="cats" style="margin-top:12px"></div>
+</div>
+
+<!-- CUSTOM EDITOR -->
+<div class="screen" id="editor">
+  <div class="bandera-wrap"><div class="bandera"></div><div class="bandera b2"></div></div>
+  <h1 class="logo" style="font-size:clamp(30px,9vw,44px)">Custom <span class="accent">Category</span></h1>
+  <p class="hint">Type your words — one per line. They're saved on your phone even after you close the app.</p>
+  <textarea id="customWords" placeholder="e.g.&#10;Grandma's karaoke&#10;Office Christmas party&#10;Beach trip 2025"></textarea>
+  <div class="row2" style="margin-top:14px">
+    <button class="btn ghost" id="editorBack">Back</button>
+    <button class="btn primary" id="editorPlay">Play!</button>
+  </div>
+</div>
+
+<!-- READY -->
+<div class="screen" id="ready">
+  <div style="flex:1"></div>
+  <div class="label" style="opacity:.6;color:var(--white)">Category</div>
+  <div class="catname" id="readyCat"></div>
+  <p class="howto">Hold the phone on the <b>guesser's forehead</b>, word facing the group. The group may only answer:</p>
+  <div class="answers"><span>YES</span><span>NO</span><span>MAYBE</span></div>
+  <p class="howto" style="margin-top:14px">Guessed it? <b>Tilt the phone DOWN</b> = Got it!<br>Stuck? <b>Tilt UP</b> = Pass. (Or tap the buttons.)</p>
+  <button class="chip" id="tiltToggle" style="flex:none;align-self:center;padding:10px 22px;margin-top:2px">Tilt to answer: ON</button>
+  <div style="flex:1"></div>
+  <button class="btn primary" id="goBtn" style="font-size:24px;padding:20px">Ready — GO!</button>
+  <button class="btn ghost" id="readyBack" style="margin-top:10px;background:transparent;color:var(--white);border-color:rgba(255,253,245,.5);box-shadow:none">Back</button>
+</div>
+
+<!-- COUNTDOWN -->
+<div class="screen" id="count"><div class="num" id="countNum">3</div></div>
+
+<!-- PLAY -->
+<div class="screen" id="play">
+  <div class="timerbar"><i id="tbar" style="width:100%"></i></div>
+  <div class="hud">
+    <div class="score" id="scoreChip">0 correct</div>
+    <div class="clock" id="clock">1:30</div>
+  </div>
+  <div class="wordzone"><div class="word" id="word"></div></div>
+  <div class="paddles">
+    <button class="paddle pass" id="passBtn">Pass<small>next word</small></button>
+    <button class="paddle tama" id="tamaBtn">Got it!<small>guessed right!</small></button>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div class="screen" id="results">
+  <div class="bandera-wrap"><div class="bandera"></div><div class="bandera b2"></div></div>
+  <h2>Time's up!</h2>
+  <div class="bigscore"><span id="finalScore">0</span> <small>CORRECT</small></div>
+  <div class="wordlist" id="wordlist"></div>
+  <div class="row2">
+    <button class="btn ghost" id="homeBtn">New category</button>
+    <button class="btn primary" id="againBtn">Play again!</button>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- word banks ---------- */
+const BANKS = {
+  animals: { name:"Animals", desc:"dog, carabao, shark…", words:[
+    "dog","cat","carabao","pig","chicken","goat","rat","snake","lizard","cockroach",
+    "mosquito","ant","spider","shark","milkfish","tilapia","shrimp","crab","squid","eagle",
+    "sparrow","pigeon","gecko","frog","turtle","monkey","elephant","lion","tiger","horse",
+    "cow","sheep","duck","bat","tarsier","butterfly","snail","bee","dragonfly","jellyfish"
+  ]},
+  food: { name:"Food", desc:"adobo, halo-halo…", words:[
+    "adobo","sinigang","kare-kare","lechon","sisig","balut","halo-halo","taho","lumpia","pancit",
+    "fried chicken","bulalo","barbecue","longganisa","tocino","beef tapa","shrimp paste","rice","dried fish","ensaymada",
+    "pandesal","bibingka","puto","ice cream","leche flan","turon","banana cue","chicharon","siopao","instant noodles",
+    "goto","arroz caldo","champorado","spaghetti","chicken inasal","kaldereta","salted egg","suman","pizza","buko juice"
+  ]},
+  places: { name:"Places", desc:"Boracay, the market…", words:[
+    "Boracay","Baguio","Tagaytay","Palawan","Vigan","Intramuros","Luneta","Divisoria","Quiapo","Mayon Volcano",
+    "Taal","Chocolate Hills","Banaue Rice Terraces","Cebu","Davao","Siargao","Batanes","Manila Bay","wet market","church",
+    "hospital","school","sari-sari store","repair shop","street corner","town plaza","cemetery","farm","beach","river",
+    "barbershop","carinderia","bus terminal","pier","mountain","cave","basketball court","barangay hall","shopping mall","town fiesta"
+  ]},
+  famous: { name:"Famous Pinoys", desc:"Pacquiao, Rizal…", words:[
+    "Jose Rizal","Andres Bonifacio","Lapu-Lapu","Apolinario Mabini","Manny Pacquiao","Hidilyn Diaz","Efren 'Bata' Reyes","Lea Salonga","Sarah Geronimo","Regine Velasquez",
+    "Gary Valenciano","Vice Ganda","Kathryn Bernardo","Daniel Padilla","Coco Martin","Willie Revillame","Kris Aquino","Dolphy","Fernando Poe Jr.","Nora Aunor",
+    "Sharon Cuneta","Aga Muhlach","Piolo Pascual","Anne Curtis","Alden Richards","Maine Mendoza","Catriona Gray","Pia Wurtzbach","Vilma Santos","Robin Padilla",
+    "Jollibee","Juan dela Cruz","Darna","Ninoy Aquino","Cory Aquino","Michael V","Jose Mari Chan","Bamboo","KZ Tandingan","Carlos Yulo"
+  ]},
+  objects: { name:"Objects", desc:"dipper, jeepney, broom…", words:[
+    "broom","mop","water dipper","bucket","sleeping mat","mosquito net","slippers","umbrella","farmer's hat","machete",
+    "clay pot","cooking pot","ladle","winnowing basket","hand fan","jeepney","tricycle","pedicab","boat","pushcart",
+    "hammock","mirror","clock","candle","matches","balloon","kite","spinning top","marbles","sungka board",
+    "playing cards","guitar","karaoke machine","electric fan","spoon","fork","treasure chest","fence","ladder","window"
+  ]},
+  jobs: { name:"Jobs", desc:"security guard, vendor…", words:[
+    "doctor","nurse","teacher","police officer","firefighter","soldier","driver","bus conductor","fisherman","farmer",
+    "carpenter","plumber","electrician","barber","laundrywoman","housekeeper","street vendor","security guard","lawyer","engineer",
+    "architect","pilot","seaman","call center agent","actor","dressmaker","baker","chef","waiter","mail carrier",
+    "garbage collector","barangay tanod","mechanic","dentist","masseuse","faith healer","balut vendor","ice cream vendor","taho vendor","photographer"
+  ]},
+  actions: { name:"Actions", desc:"dancing, snoring…", words:[
+    "eating","sleeping","running","dancing","singing","taking a bath","cooking","doing laundry","sweeping","crying",
+    "laughing","taking a selfie","sulking","whistling","punching","swimming","climbing","reading","writing","praying",
+    "snoring","sneezing","coughing","scratching","fanning yourself","walking","jumping","listening","hiding","washing dishes",
+    "planting","grocery shopping","shaking hands","hugging","waving","counting","cutting hair","lifting weights","driving","sewing"
+  ]}
+};
+/* ---------- generated topic packs ---------- */
+const PACKS = {
+  lotr: { name:"Lord of the Rings", desc:"Frodo, Gandalf, Mordor…", alias:["lotr","lord of the rings","hobbit","tolkien","middle earth"], words:[
+    "Frodo","Gandalf","Aragorn","Legolas","Gimli","Gollum","Sauron","Saruman","Bilbo Baggins","Samwise Gamgee",
+    "Merry","Pippin","Boromir","Arwen","Galadriel","Elrond","Éowyn","the One Ring","Mordor","the Shire",
+    "Rivendell","Mount Doom","Helm's Deep","Minas Tirith","hobbit","orc","elf","dwarf","ent","Balrog",
+    "Nazgûl","Shelob","Treebeard","mithril","\"My precious\"","second breakfast","Gondor","Rohan","the Eye of Sauron","Smeagol"
+  ]},
+  harrypotter: { name:"Harry Potter", desc:"Hogwarts, quidditch…", alias:["harry potter","hogwarts","wizard","hp","potter"], words:[
+    "Harry Potter","Hermione Granger","Ron Weasley","Dumbledore","Voldemort","Snape","Hagrid","Draco Malfoy","Hogwarts","Gryffindor",
+    "Slytherin","Hufflepuff","Ravenclaw","quidditch","golden snitch","magic wand","sorting hat","invisibility cloak","Marauder's Map","Dobby",
+    "house elf","dementor","Patronus","Azkaban","Diagon Alley","Platform 9¾","Hedwig","polyjuice potion","horcrux","Triwizard Tournament",
+    "basilisk","Buckbeak","Sirius Black","Bellatrix","\"Expelliarmus!\"","butterbeer","Hogwarts Express","Moaning Myrtle","the Golden Trio","He-Who-Must-Not-Be-Named"
+  ]},
+  starwars: { name:"Star Wars", desc:"Jedi, lightsaber, Yoda…", alias:["star wars","jedi","skywalker","mandalorian"], words:[
+    "Luke Skywalker","Darth Vader","Princess Leia","Han Solo","Chewbacca","Yoda","Obi-Wan Kenobi","R2-D2","C-3PO","lightsaber",
+    "the Force","Death Star","Millennium Falcon","stormtrooper","Jedi","Sith","Kylo Ren","Rey","BB-8","Grogu",
+    "the Mandalorian","Ewok","Wookiee","Tatooine","Emperor Palpatine","Darth Maul","podracing","X-wing","TIE fighter","clone trooper",
+    "Boba Fett","Jabba the Hutt","\"May the Force be with you\"","Anakin Skywalker","droid","\"I am your father\""
+  ]},
+  marvel: { name:"Marvel", desc:"Avengers, Thanos…", alias:["marvel","avengers","mcu","superhero","spiderman","spider-man"], words:[
+    "Iron Man","Captain America","Thor","Hulk","Black Widow","Hawkeye","Spider-Man","Doctor Strange","Black Panther","Thanos",
+    "Infinity Gauntlet","the Avengers","Loki","Groot","Rocket Raccoon","Star-Lord","Gamora","Ant-Man","Scarlet Witch","Vision",
+    "Nick Fury","Wakanda","vibranium","Mjolnir","Captain Marvel","Deadpool","Wolverine","X-Men","Venom","Green Goblin",
+    "web shooter","the Snap","multiverse","Stan Lee cameo","\"I am Groot\"","\"Avengers, assemble!\""
+  ]},
+  disney: { name:"Disney + Pixar", desc:"Elsa, Simba, Buzz…", alias:["disney","pixar","frozen","princess"], words:[
+    "Mickey Mouse","Minnie Mouse","Donald Duck","Goofy","Elsa","Anna","Olaf","\"Let It Go\"","Simba","Mufasa",
+    "Scar","Hakuna Matata","Ariel","Ursula","Moana","Maui","Stitch","Aladdin","Genie","magic carpet",
+    "Cinderella","glass slipper","Snow White","seven dwarfs","Mulan","Rapunzel","Beauty and the Beast","Belle","Buzz Lightyear","Woody",
+    "Nemo","Dory","Lightning McQueen","Encanto","Bruno","Tinker Bell","Peter Pan","Pinocchio","Ratatouille","Up"
+  ]},
+  pokemon: { name:"Pokémon", desc:"Pikachu, Poké Ball…", alias:["pokemon","pikachu","poke"], words:[
+    "Pikachu","Ash Ketchum","Charizard","Bulbasaur","Squirtle","Charmander","Eevee","Snorlax","Jigglypuff","Mewtwo",
+    "Mew","Gengar","Magikarp","Gyarados","Psyduck","Meowth","Team Rocket","Poké Ball","gym badge","Pokédex",
+    "Pokémon trainer","evolution","legendary Pokémon","shiny Pokémon","Lucario","Greninja","\"Gotta catch 'em all\"","Professor Oak","Misty","Brock",
+    "Pokémon Center","Nurse Joy","thunderbolt","Pokémon GO"
+  ]},
+  anime: { name:"Anime", desc:"Naruto, Goku, Titan…", alias:["anime","manga","naruto","one piece","dragon ball","ghibli"], words:[
+    "Naruto","Sasuke","Kakashi","Itachi","rasengan","Hokage","Goku","Vegeta","Super Saiyan","kamehameha",
+    "Luffy","Zoro","One Piece","Attack on Titan","Eren Yeager","Levi","Titan","Demon Slayer","Tanjiro","Nezuko",
+    "Death Note","Light Yagami","L","Shinigami","My Hero Academia","Deku","All Might","Jujutsu Kaisen","Gojo","Sailor Moon",
+    "Doraemon","Totoro","Spirited Away","Studio Ghibli","Pikachu","ramen"
+  ]},
+  nba: { name:"NBA", desc:"LeBron, slam dunk…", alias:["nba","basketball","lebron","lakers"], words:[
+    "LeBron James","Stephen Curry","Michael Jordan","Kobe Bryant","Shaquille O'Neal","Kevin Durant","Giannis","Luka Dončić","Nikola Jokić","Kyrie Irving",
+    "James Harden","Dennis Rodman","slam dunk","three-pointer","free throw","alley-oop","buzzer beater","crossover","airball","rebound",
+    "assist","block","traveling","Lakers","Warriors","Celtics","Chicago Bulls","Spurs","MVP","rookie",
+    "NBA draft","playoffs","NBA Finals","championship ring","referee","jersey"
+  ]},
+  kpop: { name:"K-pop + K-drama", desc:"BTS, Squid Game…", alias:["kpop","k-pop","kdrama","k-drama","korean","bts","blackpink"], words:[
+    "BTS","Blackpink","Jungkook","Jimin","V","RM","Lisa","Jennie","Rosé","Jisoo",
+    "Twice","NewJeans","Seventeen","Stray Kids","EXO","PSY","\"Gangnam Style\"","lightstick","comeback","bias",
+    "aegyo","fandom","Squid Game","Crash Landing on You","Goblin","Descendants of the Sun","Hyun Bin","Son Ye-jin","Lee Min-ho","Park Seo-joon",
+    "oppa","saranghae","mukbang","finger heart"
+  ]},
+  videogames: { name:"Video Games", desc:"Mario, Minecraft, ML…", alias:["video games","games","gaming","mario","minecraft","mobile legends"], words:[
+    "Mario","Luigi","Princess Peach","Bowser","Zelda","Link","Minecraft","creeper","Fortnite","Roblox",
+    "Pac-Man","Sonic the Hedgehog","Tetris","Among Us","impostor","GTA","Call of Duty","Mobile Legends","League of Legends","Dota",
+    "Valorant","Genshin Impact","Kirby","Donkey Kong","Street Fighter","Mortal Kombat","Lara Croft","Kratos","PlayStation","Xbox",
+    "Nintendo Switch","joystick","game over","power-up","boss fight","speedrun"
+  ]},
+  tv: { name:"TV Series", desc:"Stranger Things, GoT…", alias:["tv","series","netflix","shows","game of thrones","friends"], words:[
+    "Friends","Stranger Things","Eleven","Demogorgon","Game of Thrones","Jon Snow","Daenerys","Tyrion","winter is coming","Breaking Bad",
+    "Walter White","The Office","Michael Scott","Money Heist","Wednesday","Sherlock","Grey's Anatomy","The Simpsons","How I Met Your Mother","The Big Bang Theory",
+    "The Walking Dead","zombie","Black Mirror","Bridgerton","Peaky Blinders","House of the Dragon","The Last of Us","Ross and Rachel","\"How you doin'?\"","binge-watching",
+    "cliffhanger","season finale","plot twist","spoiler"
+  ]},
+  christmas: { name:"Christmas", desc:"Santa, parol, Noche Buena…", alias:["christmas","xmas","pasko","holiday"], words:[
+    "Santa Claus","Rudolph","reindeer","sleigh","elf","North Pole","Christmas tree","mistletoe","gingerbread man","snowman",
+    "candy cane","Christmas stocking","chimney","Jingle Bells","carolers","Noche Buena","parol","Simbang Gabi","aguinaldo","monito monita",
+    "fruit salad","queso de bola","hamon","gift wrapping","Secret Santa","Christmas lights","angel","nativity scene","Three Kings","\"All I Want for Christmas\"",
+    "Mariah Carey","snow globe","wreath","Christmas ornament","midnight feast","exchange gift"
+  ]},
+  movies: { name:"Blockbuster Movies", desc:"Titanic, Batman, Shrek…", alias:["movies","films","hollywood","cinema","batman","dc"], words:[
+    "Titanic","Jack and Rose","Jurassic Park","Avatar","Jaws","E.T.","Back to the Future","Terminator","\"I'll be back\"","Rocky",
+    "James Bond","Mission Impossible","Fast and Furious","Minions","Shrek","Kung Fu Panda","Transformers","Godzilla","King Kong","Home Alone",
+    "Mr. Bean","John Wick","Barbie","Oppenheimer","Top Gun","Indiana Jones","Batman","Joker","Superman","Wonder Woman",
+    "Aquaman","The Flash","popcorn","movie trailer","red carpet","Oscar award"
+  ]}
+};
+const HALO = { name:"Halo-Halo Mix", desc:"everything, all mixed up!", words: Object.values(BANKS).flatMap(b=>b.words) };
+
+/* ---------- state ---------- */
+const LS_WORDS="ph_custom_words", LS_TIME="ph_time";
+let roundTime = +(localStorage.getItem(LS_TIME)||90);
+let currentKey=null, deck=[], deckPos=0;
+let timeLeft=0, timerId=null, results=[], score=0, wakeLock=null;
+
+const $=id=>document.getElementById(id);
+const screens=["home","editor","ready","count","play","results"];
+function show(id){ screens.forEach(s=>$(s).classList.toggle("on",s===id)); }
+
+/* ---------- audio ---------- */
+let actx=null;
+function beep(freq,dur,vol){
+  try{
+    actx=actx||new (window.AudioContext||window.webkitAudioContext)();
+    if(actx.state==="suspended")actx.resume();
+    const o=actx.createOscillator(),g=actx.createGain();
+    o.type="square";o.frequency.value=freq;
+    g.gain.setValueAtTime(vol,actx.currentTime);
+    g.gain.exponentialRampToValueAtTime(.001,actx.currentTime+dur);
+    o.connect(g);g.connect(actx.destination);
+    o.start();o.stop(actx.currentTime+dur);
+  }catch(e){}
+}
+function buzz(ms){ if(navigator.vibrate)navigator.vibrate(ms); }
+
+/* ---------- home ---------- */
+function bankFor(key){
+  if(key==="halo")return HALO;
+  if(key==="custom")return {name:"Your Words", words:(localStorage.getItem(LS_WORDS)||"").split("\n").map(w=>w.trim()).filter(Boolean)};
+  return BANKS[key]||PACKS[key];
+}
+function matches(q,key,bank){
+  if(!q)return true;
+  const hay=[bank.name,bank.desc||"",key].concat(bank.alias||[]).join(" ").toLowerCase();
+  return q.toLowerCase().trim().split(/\s+/).every(t=>hay.includes(t));
+}
+function buildHome(){
+  const q=$("search").value;
+  const c=$("cats");c.innerHTML="";
+  let shown=0;
+  const label=t=>{
+    const d=document.createElement("div");
+    d.className="grid-label";d.textContent=t;
+    c.appendChild(d);
+  };
+  const add=(key,name,desc,cls)=>{
+    const b=document.createElement("button");
+    b.className="cat"+(cls?" "+cls:"");
+    b.innerHTML="<span>"+name+"</span><small>"+desc+"</small>";
+    b.onclick=()=>{ if(key==="custom"){openEditor();} else {pickCategory(key);} };
+    c.appendChild(b);shown++;
+  };
+  const classics=Object.entries(BANKS).filter(([k,b])=>matches(q,k,b));
+  if(classics.length){ label("Classics"); classics.forEach(([k,b])=>add(k,b.name,b.desc)); }
+  const packs=Object.entries(PACKS).filter(([k,b])=>matches(q,k,b));
+  if(packs.length){ label("Topic packs"); packs.forEach(([k,b])=>add(k,b.name,b.desc)); }
+  if(!q||matches(q,"halo mix everything",HALO)){ label("More"); add("halo",HALO.name,HALO.desc); }
+  const n=bankFor("custom").words.length;
+  if(!q)add("custom","+ Custom Category", n? n+" words — edit or play":"make your own word list","custom");
+  if(!shown){
+    const d=document.createElement("div");
+    d.className="nores";
+    d.innerHTML="No <b>"+q.replace(/[<>&]/g,"")+"</b> pack yet! Ask Claude in the chat — say <b>&ldquo;add a "+q.replace(/[<>&]/g,"")+" pack&rdquo;</b> and it'll show up here. Or build it yourself:";
+    const btn=document.createElement("button");
+    btn.className="btn ghost";btn.style.marginTop="12px";btn.style.width="100%";btn.style.fontSize="15px";
+    btn.textContent="+ Custom Category";
+    btn.onclick=openEditor;
+    d.appendChild(btn);
+    c.appendChild(d);
+  }
+}
+$("search").addEventListener("input",buildHome);
+document.querySelectorAll("#timeChips .chip").forEach(ch=>{
+  if(+ch.dataset.t===roundTime){document.querySelectorAll("#timeChips .chip").forEach(x=>x.classList.remove("sel"));ch.classList.add("sel");}
+  ch.onclick=()=>{
+    document.querySelectorAll("#timeChips .chip").forEach(x=>x.classList.remove("sel"));
+    ch.classList.add("sel");
+    roundTime=+ch.dataset.t;
+    localStorage.setItem(LS_TIME,roundTime);
+  };
+});
+
+/* ---------- editor ---------- */
+function openEditor(){
+  $("customWords").value=localStorage.getItem(LS_WORDS)||"";
+  show("editor");
+}
+function saveCustom(){ localStorage.setItem(LS_WORDS,$("customWords").value); buildHome(); }
+$("editorBack").onclick=()=>{saveCustom();show("home");};
+$("editorPlay").onclick=()=>{
+  saveCustom();
+  if(bankFor("custom").words.length<3){alert("Add at least 3 words first!");return;}
+  pickCategory("custom");
+};
+
+/* ---------- ready / countdown ---------- */
+function pickCategory(key){
+  currentKey=key;
+  $("readyCat").textContent=bankFor(key).name;
+  show("ready");
+}
+$("readyBack").onclick=()=>show("home");
+$("goBtn").onclick=()=>{armTilt();startCountdown();};
+
+/* ---------- tilt controls ---------- */
+const LS_TILT="ph_tilt";
+let tiltOn = localStorage.getItem(LS_TILT)!=="off";
+let tiltListening=false, tiltNeutral=false, tiltCooldown=0;
+function updateTiltBtn(){
+  $("tiltToggle").textContent="Tilt to answer: "+(tiltOn?"ON":"OFF");
+  $("tiltToggle").classList.toggle("sel",tiltOn);
+}
+$("tiltToggle").onclick=()=>{
+  tiltOn=!tiltOn;
+  localStorage.setItem(LS_TILT,tiltOn?"on":"off");
+  updateTiltBtn();
+};
+updateTiltBtn();
+async function armTilt(){
+  if(!tiltOn)return;
+  try{
+    // iOS asks for motion permission; must be triggered by the GO tap
+    if(typeof DeviceOrientationEvent!=="undefined" && DeviceOrientationEvent.requestPermission){
+      const r=await DeviceOrientationEvent.requestPermission();
+      if(r!=="granted")return;
+    }
+    if(!tiltListening){
+      window.addEventListener("deviceorientation",onTilt);
+      tiltListening=true;
+    }
+  }catch(e){}
+}
+function onTilt(e){
+  if(!tiltOn||e.beta==null||!$("play").classList.contains("on"))return;
+  const b=e.beta, now=performance.now();
+  // upright on the forehead ≈ 90°; face-down ≈ ±180°; face-up ≈ 0°
+  const down = b>150||b<-150;
+  const up = b>-35&&b<35;
+  if(tiltNeutral && now>tiltCooldown){
+    if(down){tiltNeutral=false;tiltCooldown=now+800;mark(true);}
+    else if(up){tiltNeutral=false;tiltCooldown=now+800;mark(false);}
+  }else if(b>55&&b<125){
+    tiltNeutral=true; // must return upright before the next flick counts
+  }
+}
+
+function shuffle(a){
+  a=a.slice();
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+function startCountdown(){
+  beep(660,.1,.15); // unlock audio on the tap
+  deck=shuffle(bankFor(currentKey).words);deckPos=0;
+  results=[];score=0;
+  show("count");
+  let n=3;
+  const numEl=$("countNum");
+  const tick=()=>{
+    if(n===0){startRound();return;}
+    numEl.textContent=n;
+    numEl.classList.remove("pop");void numEl.offsetWidth;numEl.classList.add("pop");
+    beep(520,.12,.2);
+    n--;
+    setTimeout(tick,900);
+  };
+  tick();
+}
+
+/* ---------- play ---------- */
+async function grabWakeLock(){
+  try{ wakeLock=await navigator.wakeLock.request("screen"); }catch(e){}
+}
+function nextWord(){
+  if(deckPos>=deck.length){deck=shuffle(deck);deckPos=0;}
+  $("word").textContent=deck[deckPos++];
+}
+function fmt(s){ return Math.floor(s/60)+":"+String(s%60).padStart(2,"0"); }
+function startRound(){
+  timeLeft=roundTime;
+  $("clock").textContent=fmt(timeLeft);
+  $("tbar").style.width="100%";
+  $("scoreChip").textContent="0 correct";
+  nextWord();
+  show("play");
+  grabWakeLock();
+  beep(880,.2,.25);
+  timerId=setInterval(()=>{
+    timeLeft--;
+    $("clock").textContent=fmt(Math.max(0,timeLeft));
+    $("tbar").style.width=(timeLeft/roundTime*100)+"%";
+    if(timeLeft<=5&&timeLeft>0)beep(980,.08,.2);
+    if(timeLeft<=0)endRound();
+  },1000);
+}
+function flash(cls){
+  const p=$("play");
+  p.classList.add(cls);
+  setTimeout(()=>p.classList.remove(cls),220);
+}
+function mark(ok){
+  if(!$("play").classList.contains("on"))return;
+  results.push({word:$("word").textContent,ok});
+  if(ok){score++;beep(1180,.16,.25);buzz(60);flash("flash-tama");}
+  else{beep(300,.16,.2);buzz([30,40,30]);flash("flash-pass");}
+  $("scoreChip").textContent=score+" correct";
+  nextWord();
+}
+$("tamaBtn").onclick=()=>mark(true);
+$("passBtn").onclick=()=>mark(false);
+
+function endRound(){
+  clearInterval(timerId);timerId=null;
+  if(wakeLock){wakeLock.release().catch(()=>{});wakeLock=null;}
+  beep(220,.5,.3);buzz(400);
+  $("finalScore").textContent=score;
+  const wl=$("wordlist");wl.innerHTML="";
+  results.forEach(r=>{
+    const d=document.createElement("div");
+    d.className="wl";
+    d.innerHTML="<span>"+r.word+"</span><span class='tag "+(r.ok?"ok'>GOT IT":"no'>PASS")+"</span>";
+    wl.appendChild(d);
+  });
+  if(!results.length)wl.innerHTML="<div class='wl'><span>No answers — try again!</span></div>";
+  show("results");
+}
+$("againBtn").onclick=startCountdown;
+$("homeBtn").onclick=()=>{buildHome();show("home");};
+
+buildHome();
+})();
+</script>
