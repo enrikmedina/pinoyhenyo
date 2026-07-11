@@ -235,6 +235,7 @@
     <button class="chip" data-t="60">1:00</button>
     <button class="chip sel" data-t="90">1:30</button>
     <button class="chip" data-t="120">2:00</button>
+    <button class="chip" data-t="0">&#8734; No limit</button>
   </div>
 
   <div class="label">Find a topic</div>
@@ -633,10 +634,7 @@ const PACKS = {
     "Dragon Sickness","The Entmoot","Hobbit-hole","\"You shall not pass!\"","\"One does not simply\"","\"A wizard is never late\"","\"You have my sword\"","\"And my bow\"",
     "\"And my axe\"","\"Taking the hobbits to Isengard\"","\"Po-ta-toes\"","\"I am no man\"","\"For Frodo\"","\"Fool of a Took!\"","\"Fly, you fools!\"","\"Not all who wander are lost\"",
     "\"You bow to no one\"","\"But I can carry you!\"","\"Nobody tosses a Dwarf\"","\"Still only counts as one\"","\"Speak, friend, and enter\"","\"Mellon\"","\"The Beacons are lit\"","\"Shire! Baggins!\"",
-    "\"It comes in pints?\"","\"A red sun rises\"","Elijah Wood","Ian McKellen","Viggo Mortensen","Sean Astin","Orlando Bloom","Sean Bean",
-    "Cate Blanchett","Liv Tyler","Hugo Weaving","Andy Serkis","Christopher Lee","Ian Holm","Dominic Monaghan","Billy Boyd",
-    "John Rhys-Davies","Karl Urban","Miranda Otto","Bernard Hill","David Wenham","Martin Freeman","Richard Armitage","Benedict Cumberbatch",
-    "Luke Evans","Evangeline Lilly","Lee Pace","Morfydd Clark"
+    "\"It comes in pints?\"","\"A red sun rises\""
   ]},
   harrypotter: { name:"Harry Potter", desc:"Hogwarts, quidditch…", alias:["harry potter","hogwarts","wizard","hp","potter"], words:[
     "Harry Potter","Hermione Granger","Ron Weasley","Dumbledore","Voldemort","Snape","Hagrid","Draco Malfoy",
@@ -675,10 +673,7 @@ const PACKS = {
     "Chaser","Beater","The Quidditch World Cup","The Yule Ball","The Battle of Hogwarts","Auror","The Boy Who Lived","You-Know-Who",
     "The Chosen One","The Unbreakable Vow","Animagus","Apparition","The Prophecy","Fantastic Beasts","\"Yer a wizard, Harry\"","\"Always\"",
     "\"After all this time?\"","\"Ten points to Gryffindor\"","\"It's LeviOsa, not LevioSA\"","\"Mischief Managed\"","\"I Solemnly Swear\"","\"Dobby is a free elf\"","\"Not my daughter!\"","\"Troll in the dungeon!\"",
-    "\"Turn to page 394\"","\"I must not tell lies\"","Daniel Radcliffe","Emma Watson","Rupert Grint","Alan Rickman","Maggie Smith","Robbie Coltrane",
-    "Michael Gambon","Richard Harris","Ralph Fiennes","Helena Bonham Carter","Gary Oldman","David Thewlis","Tom Felton","Evanna Lynch",
-    "Matthew Lewis","Bonnie Wright","Emma Thompson","Kenneth Branagh","Brendan Gleeson","Imelda Staunton","Jason Isaacs","Eddie Redmayne",
-    "Johnny Depp","Jude Law","Mads Mikkelsen","Warwick Davis","J.K. Rowling"
+    "\"Turn to page 394\"","\"I must not tell lies\"","J.K. Rowling"
   ]},
   starwars: { name:"Star Wars", desc:"Jedi, lightsaber, Yoda…", alias:["star wars","jedi","skywalker","mandalorian"], words:[
     "Luke Skywalker","Darth Vader","Princess Leia","Han Solo","Chewbacca","Yoda","Obi-Wan Kenobi","R2-D2",
@@ -714,11 +709,7 @@ const PACKS = {
     "Life Day","Hyperspace","\"Help me, Obi-Wan Kenobi\"","\"It's a trap!\"","\"Do or do not\"","\"Hello there!\"","\"General Kenobi\"","\"I am the Senate\"",
     "\"I have the high ground\"","\"This is the way\"","\"I have spoken\"","\"Never tell me the odds\"","\"Chewie, we're home\"","\"These aren't the droids\"","\"Punch it, Chewie!\"","\"Laugh it up, fuzzball\"",
     "\"I know\"","\"Rebellions are built on hope\"","\"Somehow, Palpatine returned\"","\"Unlimited power!\"","\"Now this is podracing!\"","\"You were the chosen one!\"","\"Use the Force, Luke\"","\"Let the Wookiee win\"",
-    "\"I don't like sand\"","\"A Galaxy Far, Far Away\"","Mark Hamill","Harrison Ford","Carrie Fisher","Ewan McGregor","Hayden Christensen","Natalie Portman",
-    "Samuel L. Jackson","Liam Neeson","Ian McDiarmid","James Earl Jones","Alec Guinness","Billy Dee Williams","Anthony Daniels","Frank Oz",
-    "Daisy Ridley","Adam Driver","John Boyega","Oscar Isaac","Felicity Jones","Diego Luna","Donnie Yen","Pedro Pascal",
-    "Giancarlo Esposito","Katee Sackhoff","Rosario Dawson","Temuera Morrison","Ming-Na Wen","Stellan Skarsgård","Forest Whitaker","Emilia Clarke",
-    "Woody Harrelson","Donald Glover","John Williams","George Lucas","Dave Filoni","Jon Favreau","Peter Cushing"
+    "\"I don't like sand\"","\"A Galaxy Far, Far Away\"","John Williams","George Lucas","Dave Filoni","Jon Favreau"
   ]},
   marvel: { name:"Marvel", desc:"Avengers, Thanos…", alias:["marvel","avengers","mcu","superhero","spiderman","spider-man"], words:[
     "Iron Man","Captain America","Thor","Hulk","Black Widow","Hawkeye","Spider-Man","Doctor Strange",
@@ -754,11 +745,8 @@ const PACKS = {
     "Captain America: The Winter Soldier","Thor: Ragnarok","No Way Home","Homecoming","Far From Home","The First Avenger","Into the Spider-Verse","Across the Spider-Verse",
     "Logan","Days of Future Past","Deadpool & Wolverine","Multiverse of Madness","Quantumania","The Marvels","The Incredible Hulk","Love and Thunder",
     "\"I am Iron Man\"","\"I can do this all day\"","\"I love you 3000\"","\"Hulk smash\"","\"Puny god\"","\"I am inevitable\"","\"On your left\"","\"Wakanda Forever\"",
-    "Robert Downey Jr.","Chris Evans","Chris Hemsworth","Scarlett Johansson","Mark Ruffalo","Jeremy Renner","Tom Holland","Tom Hiddleston",
-    "Samuel L. Jackson","Chadwick Boseman","Chris Pratt","Zoe Saldana","Dave Bautista","Vin Diesel","Bradley Cooper","Benedict Cumberbatch",
-    "Elizabeth Olsen","Paul Rudd","Brie Larson","Hugh Jackman","Ryan Reynolds","Patrick Stewart","Ian McKellen","Tobey Maguire",
-    "Andrew Garfield","Josh Brolin","Stan Lee","Kevin Feige","Letitia Wright","Michael B. Jordan","The Blip","Super Soldier Serum",
-    "Gamma Radiation","Symbiote","Daily Bugle","Oscorp","Stark Industries","Baxter Building","What If...?"
+    "Stan Lee","Kevin Feige","The Blip","Super Soldier Serum","Gamma Radiation","Symbiote","Daily Bugle","Oscorp",
+    "Stark Industries","Baxter Building","What If...?"
   ]},
   dc: { name:"DC", desc:"Batman, Superman, Gotham…", alias:["dc","dc comics","batman","superman","justice league","gotham","dceu"], words:[
     "Batman","Superman","Wonder Woman","Aquaman","The Flash","Green Lantern","Cyborg","Shazam",
@@ -801,14 +789,10 @@ const PACKS = {
     "The Batman","Joker movie","Joker: Folie à Deux","The Flash movie","Blue Beetle movie","Black Adam movie","Batman Begins","The Dark Knight Rises",
     "Batman Forever","Batman & Robin","Batman Returns","Superman Returns","Superman: The Movie","Aquaman movie","The Suicide Squad","Zack Snyder's Justice League",
     "Batman: The Animated Series","Teen Titans Go!","Young Justice","Arrowverse","Smallville TV series","Gotham TV series","Titans TV series","Batman Arkham games",
-    "Arkham Knight","Injustice: Gods Among Us","Lego Batman","Mortal Kombat vs DC","Adam West","Michael Keaton","Val Kilmer","George Clooney",
-    "Christian Bale","Ben Affleck","Robert Pattinson","Henry Cavill","Gal Gadot","Jason Momoa","Ezra Miller","Zachary Levi",
-    "Dwayne Johnson","Margot Robbie","Jared Leto","Joaquin Phoenix","Heath Ledger","Jack Nicholson","Mark Hamill's Joker","Kevin Conroy",
-    "Christopher Reeve","Brandon Routh","Tom Welling","Grant Gustin","Stephen Amell","Lynda Carter","Zack Snyder","Christopher Nolan",
-    "Tim Burton","James Gunn","Danny DeVito's Penguin","Michelle Pfeiffer's Catwoman","Anne Hathaway's Catwoman","Batfleck","Bat-nipples","\"I'm Batman\"",
-    "\"Why so serious?\"","\"Martha!\"","\"Up, up and away\"","\"Faster than a speeding bullet\"","\"This looks like a job for Superman\"","\"Holy smokes, Batman!\"","\"Kneel before Zod\"","\"I am vengeance\"",
-    "\"Puddin'\"","\"You complete me\"","the Batusi","Batman slapping Robin meme","sad Ben Affleck meme","Superman's curl","Clark Kent's glasses","phone booth change",
-    "the Daily Planet globe","Robin's \"R\" badge","Joker's laugh"
+    "Arkham Knight","Injustice: Gods Among Us","Lego Batman","Mortal Kombat vs DC","Zack Snyder","Christopher Nolan","Tim Burton","James Gunn",
+    "Batfleck","Bat-nipples","\"I'm Batman\"","\"Why so serious?\"","\"Martha!\"","\"Up, up and away\"","\"Faster than a speeding bullet\"","\"This looks like a job for Superman\"",
+    "\"Holy smokes, Batman!\"","\"Kneel before Zod\"","\"I am vengeance\"","\"Puddin'\"","\"You complete me\"","the Batusi","Batman slapping Robin meme",
+    "Superman's curl","Clark Kent's glasses","phone booth change","the Daily Planet globe","Robin's \"R\" badge","Joker's laugh"
   ]},
   disney: { name:"Disney + Pixar", desc:"Elsa, Simba, Buzz…", alias:["disney","pixar","frozen","princess"], words:[
     "Mickey Mouse","Minnie Mouse","Donald Duck","Goofy","Elsa","Anna","Olaf","\"Let It Go\"",
@@ -981,42 +965,39 @@ const PACKS = {
     "BTS","Blackpink","Jungkook","Jimin","V","RM","Lisa","Jennie",
     "Rosé","Jisoo","Twice","NewJeans","Seventeen","Stray Kids","EXO","PSY",
     "\"Gangnam Style\"","lightstick","comeback","bias","aegyo","fandom","Squid Game","Crash Landing on You",
-    "Goblin","Descendants of the Sun","Hyun Bin","Son Ye-jin","Lee Min-ho","Park Seo-joon","oppa","saranghae",
-    "mukbang","finger heart","Big Bang","2NE1","Girls' Generation","Super Junior","Red Velvet","Aespa",
-    "ITZY","IVE","LE SSERAFIM","ENHYPEN","Tomorrow X Together","Ateez","GOT7","Monsta X",
-    "NCT","SHINee","2PM","Wonder Girls","KARA","Sistar","Apink","Mamamoo",
-    "GFriend","(G)I-DLE","Treasure","iKON","Winner","Day6","The Boyz","ZEROBASEONE",
-    "RIIZE","BabyMonster","Infinite","EXID","T-ara","f(x)","STAYC","NMIXX",
-    "ILLIT","KATSEYE","V of BTS","Jin","Suga","J-Hope","IU","Taeyeon",
-    "G-Dragon","CL","Sandara Park","Rain","BoA","HyunA","Sunmi","Chungha",
-    "Jeon Somi","Kang Daniel","Cha Eun-woo","Bae Suzy","Yoona","Kai","Baekhyun","Chanyeol",
-    "D.O.","Sehun","Nayeon","Sana","Momo","Tzuyu","Dahyun","Jihyo",
-    "Hanni","Minji","Danielle","Haerin","Hyein","Karina","Winter","Ningning",
-    "Jang Wonyoung","An Yujin","Felix","Bang Chan","Hyunjin","Lee Know","Hoshi","Mingyu",
-    "Seungkwan","Vernon","S.Coups","Jackson Wang","BamBam","Mark Lee","Yeji","Ryujin",
-    "Hwasa","Solar","Soyeon","Sakura","Soobin","Yeonjun","Jungwon","Taemin",
-    "Dynamite","Butter","Boy With Luv","Spring Day","Fake Love","Mic Drop","Permission to Dance","Life Goes On",
-    "Seven","Standing Next to You","DDU-DU DDU-DU","Kill This Love","How You Like That","Pink Venom","Boombayah","Whistle",
-    "As If It's Your Last","Lovesick Girls","APT.","Solo","Money","Flower","Gentleman","Fantastic Baby",
-    "Bang Bang Bang","I Am the Best","Nobody","Gee","Sorry Sorry","Ring Ding Dong","Cheer Up","TT",
-    "Fancy","What Is Love?","The Feels","Attention","Hype Boy","Ditto","OMG","Super Shy",
-    "Next Level","Savage","Supernova","Love Dive","Antifragile","God's Menu","Psycho","Cupid",
-    "Magnetic","KPop Demon Hunters","Golden","Soda Pop","Saja Boys","Huntrix","Red Light Green Light","Dalgona Candy",
-    "Front Man","Player 456","Boys Over Flowers","Full House","Jewel in the Palace","Lovers in Paris","Stairway to Heaven","Autumn in My Heart",
-    "Winter Sonata","My Love from the Star","The Heirs","Legend of the Blue Sea","Reply 1988","Hospital Playlist","Alchemy of Souls","The World of the Married",
-    "Sky Castle","Itaewon Class","Vincenzo","True Beauty","Business Proposal","Hometown Cha-Cha-Cha","Start-Up","Extraordinary Attorney Woo",
-    "All of Us Are Dead","Sweet Home","Kingdom","The Glory","Queen of Tears","Twenty-Five Twenty-One","Mr. Queen","Mr. Sunshine",
-    "Hotel del Luna","What's Wrong with Secretary Kim","City Hunter","Coffee Prince","Dream High","The Penthouse","Marry My Husband","Lovely Runner",
-    "When Life Gives You Tangerines","Song Hye-kyo","Song Joong-ki","Kim Soo-hyun","Jun Ji-hyun","Gong Yoo","Lee Dong-wook","Park Min-young",
-    "Kim Ji-won","Kim Woo-bin","Lee Jong-suk","Ji Chang-wook","Nam Joo-hyuk","Han So-hee","Song Kang","Kim Go-eun",
-    "Park Bo-gum","Park Bo-young","Ahn Hyo-seop","Lee Jung-jae","Jung Ho-yeon","Byeon Woo-seok","Kim Seon-ho","Shin Min-a",
-    "Park Shin-hye","bias wrecker","fan chant","ARMY","Blink","Once","Carat","sasaeng",
-    "maknae","visual","unnie","noona","daesang","MAMA Awards","Music Bank","Inkigayo",
-    "photocard","fansign","fancam","selca","trainee","debut","Hallyu","random play dance",
-    "HYBE","JYP Entertainment","Borahae","Daebak","Fighting!","OST","second lead syndrome","chaebol",
-    "piggyback ride","back hug","kimchi","samgyupsal","soju","Korean BBQ","tteokbokki","kimbap",
-    "bibimbap","ramyeon","jjajangmyeon","bulgogi","gochujang","Seoul","Busan","Jeju Island",
-    "Han River","hanbok","Hangul","taekwondo","K-beauty","glass skin","banana milk"
+    "Goblin","Descendants of the Sun","oppa","saranghae","mukbang","finger heart","Big Bang","2NE1",
+    "Girls' Generation","Super Junior","Red Velvet","Aespa","ITZY","IVE","LE SSERAFIM","ENHYPEN",
+    "Tomorrow X Together","Ateez","GOT7","Monsta X","NCT","SHINee","2PM","Wonder Girls",
+    "KARA","Sistar","Apink","Mamamoo","GFriend","(G)I-DLE","Treasure","iKON",
+    "Winner","Day6","The Boyz","ZEROBASEONE","RIIZE","BabyMonster","Infinite","EXID",
+    "T-ara","f(x)","STAYC","NMIXX","ILLIT","KATSEYE","V of BTS","Jin",
+    "Suga","J-Hope","IU","Taeyeon","G-Dragon","CL","Sandara Park","Rain",
+    "BoA","HyunA","Sunmi","Chungha","Jeon Somi","Kang Daniel","Cha Eun-woo","Bae Suzy",
+    "Yoona","Kai","Baekhyun","Chanyeol","D.O.","Sehun","Nayeon","Sana",
+    "Momo","Tzuyu","Dahyun","Jihyo","Hanni","Minji","Danielle","Haerin",
+    "Hyein","Karina","Winter","Ningning","Jang Wonyoung","An Yujin","Felix","Bang Chan",
+    "Hyunjin","Lee Know","Hoshi","Mingyu","Seungkwan","Vernon","S.Coups","Jackson Wang",
+    "BamBam","Mark Lee","Yeji","Ryujin","Hwasa","Solar","Soyeon","Sakura",
+    "Soobin","Yeonjun","Jungwon","Taemin","Dynamite","Butter","Boy With Luv","Spring Day",
+    "Fake Love","Mic Drop","Permission to Dance","Life Goes On","Seven","Standing Next to You","DDU-DU DDU-DU","Kill This Love",
+    "How You Like That","Pink Venom","Boombayah","Whistle","As If It's Your Last","Lovesick Girls","APT.","Solo",
+    "Money","Flower","Gentleman","Fantastic Baby","Bang Bang Bang","I Am the Best","Nobody","Gee",
+    "Sorry Sorry","Ring Ding Dong","Cheer Up","TT","Fancy","What Is Love?","The Feels","Attention",
+    "Hype Boy","Ditto","OMG","Super Shy","Next Level","Savage","Supernova","Love Dive",
+    "Antifragile","God's Menu","Psycho","Cupid","Magnetic","KPop Demon Hunters","Golden","Soda Pop",
+    "Saja Boys","Huntrix","Red Light Green Light","Dalgona Candy","Front Man","Player 456","Boys Over Flowers","Full House",
+    "Jewel in the Palace","Lovers in Paris","Stairway to Heaven","Autumn in My Heart","Winter Sonata","My Love from the Star","The Heirs","Legend of the Blue Sea",
+    "Reply 1988","Hospital Playlist","Alchemy of Souls","The World of the Married","Sky Castle","Itaewon Class","Vincenzo","True Beauty",
+    "Business Proposal","Hometown Cha-Cha-Cha","Start-Up","Extraordinary Attorney Woo","All of Us Are Dead","Sweet Home","Kingdom","The Glory",
+    "Queen of Tears","Twenty-Five Twenty-One","Mr. Queen","Mr. Sunshine","Hotel del Luna","What's Wrong with Secretary Kim","City Hunter","Coffee Prince",
+    "Dream High","The Penthouse","Marry My Husband","Lovely Runner","When Life Gives You Tangerines","bias wrecker","fan chant","ARMY",
+    "Blink","Once","Carat","sasaeng","maknae","visual","unnie","noona",
+    "daesang","MAMA Awards","Music Bank","Inkigayo","photocard","fansign","fancam","selca",
+    "trainee","debut","Hallyu","random play dance","HYBE","JYP Entertainment","Borahae","Daebak",
+    "Fighting!","OST","second lead syndrome","chaebol","piggyback ride","back hug","kimchi","samgyupsal",
+    "soju","Korean BBQ","tteokbokki","kimbap","bibimbap","ramyeon","jjajangmyeon","bulgogi",
+    "gochujang","Seoul","Busan","Jeju Island","Han River","hanbok","Hangul","taekwondo",
+    "K-beauty","glass skin","banana milk"
   ]},
   videogames: { name:"Video Games", desc:"Mario, Minecraft, ML…", alias:["video games","games","gaming","mario","minecraft","mobile legends"], words:[
     "Mario","Luigi","Princess Peach","Bowser","Zelda","Link","Minecraft","creeper",
@@ -1094,11 +1075,56 @@ const PACKS = {
     "Encantadia","Mulawin","Darna","Mara Clara","Pangako Sa 'Yo","Meteor Garden","Kadenang Ginto","On the Wings of Love",
     "Be Careful with My Heart","Dyesebel","Marimar","Pepito Manaloto","Bubble Gang","Home Along Da Riles","John en Marsha","Okay Ka Fairy Ko",
     "Ang TV","That's Entertainment","Sineskwela","Game KNB?","Wowowin","Tawag ng Tanghalan","StarStruck","Super Inggo",
-    "Shaider","Bioman","Cardo Dalisay","Coco Martin","Vice Ganda","Kris Aquino","Willie Revillame","Boy Abunda",
-    "Dolphy","Alden Richards","Maine Mendoza","Yaya Dub","Gandang Gabi Vice","Magandang Buhay","pilot episode","rerun",
-    "teleserye","commercial break","laugh track","spin-off","reboot","Netflix","couch potato","prime time",
-    "theme song","telenovela","sitcom","spoiler alert","Emmy Awards","season premiere","Betamax","Nickelodeon",
-    "Cartoon Network"
+    "Shaider","Bioman","Cardo Dalisay","Vice Ganda","Kris Aquino","Willie Revillame","Boy Abunda","Maine Mendoza",
+    "Yaya Dub","Gandang Gabi Vice","Magandang Buhay","pilot episode","rerun","teleserye","commercial break","laugh track",
+    "spin-off","reboot","Netflix","couch potato","prime time","theme song","telenovela","sitcom",
+    "spoiler alert","Emmy Awards","season premiere","Betamax","Nickelodeon","Cartoon Network"
+  ]},
+  gameofthrones: { name:"Game of Thrones", desc:"Jon Snow, dragons, Iron Throne…", alias:["game of thrones","got","house of the dragon","house of dragon","westeros","targaryen","stark","asoiaf","white walkers"], words:[
+    "Jon Snow","Daenerys Targaryen","Tyrion Lannister","Cersei Lannister","Jaime Lannister","Arya Stark","Sansa Stark","Bran Stark",
+    "Ned Stark","Catelyn Stark","Robb Stark","Rickon Stark","Brienne of Tarth","Jorah Mormont","Samwell Tarly","Melisandre",
+    "Petyr Baelish","Littlefinger","Lord Varys","Hodor","Ygritte","Tormund Giantsbane","Bronn","Davos Seaworth",
+    "Theon Greyjoy","Ramsay Bolton","Joffrey Baratheon","Margaery Tyrell","Olenna Tyrell","Oberyn Martell","The Hound","Sandor Clegane",
+    "The Mountain","Gregor Clegane","Night King","Robert Baratheon","Stannis Baratheon","Renly Baratheon","Tywin Lannister","Sansa's direwolf Lady",
+    "Gendry","Grey Worm","Missandei","Podrick Payne","Ellaria Sand","Roose Bolton","Walder Frey","Balon Greyjoy",
+    "Euron Greyjoy","Yara Greyjoy","Meera Reed","Jojen Reed","Osha","Shae","Ros","Gilly",
+    "Maester Aemon","Maester Luwin","Maester Pycelle","Grand Maester Pycelle","Qyburn","Beric Dondarrion","Thoros of Myr","Jaqen H'ghar",
+    "Syrio Forel","Khal Drogo","Daario Naharis","Xaro Xhoan Daxos","Kraznys","Rakharo","Kovarro","Doreah",
+    "Irri","Jeor Mormont","Alliser Thorne","Eddison Tollett","Grenn","Pypar","Yoren","Janos Slynt",
+    "Rast","Karl Tanner","Craster","Mance Rayder","Rattleshirt","Styr","Orell","Val",
+    "Gilly's baby","Selyse Baratheon","Shireen Baratheon","Myrcella Baratheon","Tommen Baratheon","Lancel Lannister","Kevan Lannister","The High Sparrow",
+    "Septa Unella","Meryn Trant","Ilyn Payne","Barristan Selmy","Loras Tyrell","Mace Tyrell","Doran Martell","Trystane Martell",
+    "Areo Hotah","The Sand Snakes","Nymeria Sand","Obara Sand","Tyene Sand","Hizdahr zo Loraq","Vala","White Rat",
+    "Lysa Arryn","Robin Arryn","Yohn Royce","Vardis Egen","Mord","Hot Pie","Lommy","Polliver",
+    "The Tickler","Locke","Qhorin Halfhand","Benjen Stark","Lyanna Stark","Rhaegar Targaryen","Aerys the Mad King","Aegon the Conqueror",
+    "Rhaenyra Targaryen","Daemon Targaryen","Viserys the First","Alicent Hightower","Aegon the Second","Aemond Targaryen","Otto Hightower","Rhaenys Targaryen",
+    "Corlys Velaryon","The Sea Snake","Laena Velaryon","Laenor Velaryon","Criston Cole","Larys Strong","Harwin Strong","Lyonel Strong",
+    "Helaena Targaryen","Baela Targaryen","Rhaena Targaryen","Jacaerys Velaryon","Lucerys Velaryon","Joffrey Velaryon","Mysaria","Lord Beesbury",
+    "Grand Maester Mellos","Viserys Targaryen","Young Griff","House Stark","House Lannister","House Targaryen","House Baratheon","House Greyjoy",
+    "House Tyrell","House Martell","House Bolton","House Tully","House Arryn","House Frey","House Mormont","House Tarly",
+    "House Clegane","House Hightower","House Velaryon","Winterfell","King's Landing","The Wall","Castle Black","Dragonstone",
+    "Braavos","Meereen","The Iron Islands","Casterly Rock","Highgarden","Dorne","Beyond the Wall","The Red Keep",
+    "The Eyrie","Pyke","Riverrun","The Twins","Harrenhal","Storm's End","Sunspear","Astapor",
+    "Yunkai","Qarth","Vaes Dothrak","Old Valyria","Pentos","Volantis","Oldtown","The Citadel",
+    "Hardhome","Craster's Keep","The Dreadfort","Moat Cailin","The Vale","The North","The Reach","The Riverlands",
+    "The Stormlands","The Crownlands","The Neck","The Trident","Blackwater Bay","The Narrow Sea","The Dothraki Sea","The Lands of Always Winter",
+    "The Frostfangs","The God's Eye","The Kingsroad","The Wolfswood","Dragonpit","Drogon","Rhaegal","Viserion",
+    "Balerion","Vhagar","Meraxes","Caraxes","Syrax","Sunfyre","Seasmoke","Meleys",
+    "Ghost","Nymeria","Grey Wind","Summer","Shaggydog","Lady","White Walkers","Wights",
+    "The Children of the Forest","Giants","The Wildlings","The Free Folk","Ravens","Faceless Men","The Unsullied","The Dothraki",
+    "The Golden Company","Iron Throne","Valyrian steel","Wildfire","Dragonglass","The Night's Watch","The Red Wedding","The Purple Wedding",
+    "Battle of the Bastards","\"Winter is Coming\"","\"Hold the door\"","\"You know nothing, Jon Snow\"","\"Dracarys\"","\"A Lannister always pays his debts\"","\"Valar Morghulis\"","\"Valar Dohaeris\"",
+    "\"The King in the North\"","\"Chaos is a ladder\"","\"Shame\"","\"Mother of Dragons\"","\"Fire and Blood\"","\"Hear Me Roar\"","\"We Do Not Sow\"","\"Growing Strong\"",
+    "\"Ours is the Fury\"","Faith Militant","White Book","Hand of the King","The Small Council","Master of Coin","Master of Whisperers","Master of Ships",
+    "Master of Laws","Lord Commander","Sigils","Maester","Kingsguard","Sept of Baelor","Weirwood tree","Three-Eyed Raven",
+    "Warging","Greensight","Sword Longclaw","Sword Needle","Sword Oathkeeper","Sword Widow's Wail","Sword Ice","Sword Heartsbane",
+    "Sword Lightbringer","The Kingslayer","Warden of the North","Dragon eggs","The Blackfish","The Red Keep throne room","Blood magic","The Lord of Light",
+    "R'hlor","The Drowned God","The Seven","The Old Gods","The Many-Faced God","Braavosi coin","The House of Black and White","Milk of the poppy",
+    "Moon tea","Direwolf","The Trial by Combat","The Kingsmoot","The Great Sept","Casterly Rock gold mines","Dragon horn","The Dance of the Dragons",
+    "The Great Council","Driftmark","The Stepstones","The Crabfeeder","The Broken Anvil","The Long Night","The Doom of Valyria","Robert's Rebellion",
+    "The Sack of King's Landing","Greyscale","The Wall's gate","Dragonstone throne","The Painted Table","The Iron Bank","The Night's King legend","Blackwater Rush",
+    "The Whispering Wood","Craster's sons","A Song of Ice and Fire","The Prince That Was Promised","Azor Ahai","The Others","Cold Hands","The Rains of Castamere",
+    "Bear and the Maiden Fair","Frey pies","Sansa's wedding to Ramsay","The Battle of Blackwater","The Battle of Castle Black","The Battle of Winterfell","The Broken Man","Trial of the Seven"
   ]},
   christmas: { name:"Christmas", desc:"Santa, parol, Noche Buena…", alias:["christmas","xmas","pasko","holiday"], words:[
     "Santa Claus","Rudolph","reindeer","sleigh","elf","North Pole","Christmas tree","mistletoe",
@@ -1188,7 +1214,7 @@ const HALO = { name:"Halo-Halo Mix", desc:"everything, all mixed up!", words: Ob
 const LS_WORDS="ph_custom_words", LS_TIME="ph_time";
 let roundTime = +(localStorage.getItem(LS_TIME)||90);
 let currentKey=null, deck=[], deckPos=0;
-let timeLeft=0, timerId=null, results=[], score=0, wakeLock=null;
+let timeLeft=0, timerId=null, results=[], score=0, wakeLock=null, noLimit=false, elapsed=0;
 
 const $=id=>document.getElementById(id);
 const screens=["home","editor","ready","count","play","results"];
@@ -1209,6 +1235,7 @@ function beep(freq,dur,vol){
   }catch(e){}
 }
 function buzz(ms){ if(navigator.vibrate)navigator.vibrate(ms); }
+function chime(){ beep(784,.12,.25); setTimeout(()=>beep(1175,.20,.28),95); } // rising two-note "got it!"
 
 /* ---------- home ---------- */
 function bankFor(key){
@@ -1402,8 +1429,10 @@ function nextWord(){
 }
 function fmt(s){ return Math.floor(s/60)+":"+String(s%60).padStart(2,"0"); }
 function startRound(){
-  timeLeft=roundTime;
-  $("clock").textContent=fmt(timeLeft);
+  noLimit=(roundTime===0);
+  timeLeft=roundTime;elapsed=0;
+  $("clock").textContent=noLimit?"0:00":fmt(timeLeft);
+  document.querySelector(".timerbar").style.display=noLimit?"none":"block";
   $("tbar").style.width="100%";
   $("scoreChip").textContent="0 correct";
   $("tiltHint").textContent="Tilt down = got it · Tilt up = pass";
@@ -1418,6 +1447,7 @@ function startRound(){
   grabWakeLock();
   beep(880,.2,.25);
   timerId=setInterval(()=>{
+    if(noLimit){ elapsed++; $("clock").textContent=fmt(elapsed); return; }
     timeLeft--;
     $("clock").textContent=fmt(Math.max(0,timeLeft));
     $("tbar").style.width=(timeLeft/roundTime*100)+"%";
@@ -1433,12 +1463,13 @@ function flash(cls){
 function mark(ok){
   if(!$("play").classList.contains("on"))return;
   results.push({word:$("word").textContent,ok});
-  if(ok){score++;beep(1180,.16,.25);buzz(60);flash("flash-tama");}
+  if(ok){score++;chime();buzz(60);flash("flash-tama");}
   else{beep(300,.16,.2);buzz([30,40,30]);flash("flash-pass");}
   $("scoreChip").textContent=score+" correct";
   nextWord();
 }
 $("exitBtn").onclick=()=>{
+  if(noLimit){ endRound(); return; } // no-limit: ✕ ends the round → results
   clearInterval(timerId);timerId=null;
   if(wakeLock){wakeLock.release().catch(()=>{});wakeLock=null;}
   saveSeen();
@@ -1450,6 +1481,7 @@ function endRound(){
   if(wakeLock){wakeLock.release().catch(()=>{});wakeLock=null;}
   saveSeen();
   beep(220,.5,.3);buzz(400);
+  document.querySelector("#results h2").textContent=noLimit?"Round over!":"Time's up!";
   $("finalScore").textContent=score;
   const wl=$("wordlist");wl.innerHTML="";
   results.forEach(r=>{
