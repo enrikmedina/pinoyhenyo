@@ -189,6 +189,25 @@
   #editor textarea:focus{outline:3px solid var(--red);outline-offset:2px}
   .hint{font-size:13px;opacity:.7;margin:8px 0 14px;line-height:1.5}
 
+  /* phone held sideways: side paddles, compact chrome */
+  @media (orientation:landscape) and (max-height:520px){
+    .cats{grid-template-columns:repeat(3,1fr)}
+    h1.logo{font-size:34px;margin:4px 0 0}
+    .tagline{margin-bottom:8px}
+    #ready{overflow-y:auto;gap:4px}
+    #ready .catname{font-size:30px}
+    #ready .howto{font-size:14px;margin:4px auto 8px}
+    #goBtn{font-size:19px !important;padding:13px !important}
+    #results h2{font-size:28px}
+    .bigscore{font-size:54px}
+    .hud{padding:8px 118px 0}
+    .wordzone{padding:0 118px}
+    .word{font-size:clamp(34px,24vh,88px)}
+    .paddles{position:fixed;inset:0;padding:0;gap:0;pointer-events:none;justify-content:space-between;z-index:5}
+    .paddle{pointer-events:auto;flex:none;width:104px;height:100%;border-radius:0;font-size:17px;padding:0;box-shadow:none}
+    .paddle small{font-size:10px}
+  }
+
   @media (prefers-reduced-motion: reduce){
     *{transition:none !important;animation:none !important}
   }
@@ -537,15 +556,16 @@ async function armTilt(){
   }catch(e){}
 }
 function onTilt(e){
-  if(!tiltOn||e.beta==null||!$("play").classList.contains("on"))return;
-  const b=e.beta, now=performance.now();
-  // upright on the forehead ≈ 90°; face-down ≈ ±180°; face-up ≈ 0°
-  const down = b>150||b<-150;
-  const up = b>-35&&b<35;
+  if(!tiltOn||e.beta==null||e.gamma==null||!$("play").classList.contains("on"))return;
+  const rad=Math.PI/180;
+  // z-component of the screen normal: +1 screen faces the ceiling, -1 the floor,
+  // ~0 upright on the forehead — holds in portrait AND landscape grips
+  const f=Math.cos(e.beta*rad)*Math.cos(e.gamma*rad);
+  const now=performance.now();
   if(tiltNeutral && now>tiltCooldown){
-    if(down){tiltNeutral=false;tiltCooldown=now+800;mark(true);}
-    else if(up){tiltNeutral=false;tiltCooldown=now+800;mark(false);}
-  }else if(b>55&&b<125){
+    if(f<-0.8){tiltNeutral=false;tiltCooldown=now+800;mark(true);}
+    else if(f>0.8){tiltNeutral=false;tiltCooldown=now+800;mark(false);}
+  }else if(Math.abs(f)<0.5){
     tiltNeutral=true; // must return upright before the next flick counts
   }
 }
