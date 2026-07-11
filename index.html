@@ -1434,7 +1434,7 @@ function startRound(){
   $("clock").textContent=noLimit?"0:00":fmt(timeLeft);
   document.querySelector(".timerbar").style.display=noLimit?"none":"block";
   $("tbar").style.width="100%";
-  $("scoreChip").textContent="0 correct";
+  $("scoreChip").textContent=noLimit?"0 / 5":"0 correct";
   $("tiltHint").textContent="Tilt down = got it · Tilt up = pass";
   tiltSeen=false;
   // no motion events? surface the touch fallback so nobody gets stuck
@@ -1465,7 +1465,8 @@ function mark(ok){
   results.push({word:$("word").textContent,ok});
   if(ok){score++;chime();buzz(60);flash("flash-tama");}
   else{beep(300,.16,.2);buzz([30,40,30]);flash("flash-pass");}
-  $("scoreChip").textContent=score+" correct";
+  $("scoreChip").textContent=noLimit?(score+" / 5"):(score+" correct");
+  if(noLimit&&score>=5){ endRound(); return; } // no-limit round: first to 5 correct
   nextWord();
 }
 $("exitBtn").onclick=()=>{
