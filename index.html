@@ -1459,22 +1459,37 @@ const $=id=>document.getElementById(id);
 const screens=["home","editor","ready","count","play","results"];
 function show(id){ screens.forEach(s=>$(s).classList.toggle("on",s===id)); }
 
-/* ---------- audio ---------- */
+/* ---------- audio (synth: warm, click-free) ---------- */
 let actx=null;
-function beep(freq,dur,vol){
+function ac(){ actx=actx||new (window.AudioContext||window.webkitAudioContext)(); if(actx.state==="suspended")actx.resume(); return actx; }
+// one note with a soft attack/release envelope + optional lowpass warmth
+function note(freq,start,dur,opt){
+  opt=opt||{};
+  const type=opt.type||"sine", vol=opt.vol==null?.3:opt.vol,
+        attack=opt.attack==null?.008:opt.attack, release=opt.release==null?.12:opt.release,
+        cutoff=opt.cutoff||0, detune=opt.detune||0;
   try{
-    actx=actx||new (window.AudioContext||window.webkitAudioContext)();
-    if(actx.state==="suspended")actx.resume();
-    const o=actx.createOscillator(),g=actx.createGain();
-    o.type="square";o.frequency.value=freq;
-    g.gain.setValueAtTime(vol,actx.currentTime);
-    g.gain.exponentialRampToValueAtTime(.001,actx.currentTime+dur);
-    o.connect(g);g.connect(actx.destination);
-    o.start();o.stop(actx.currentTime+dur);
+    const c=ac(), o=c.createOscillator(), g=c.createGain();
+    o.type=type; o.frequency.value=freq; if(detune)o.detune.value=detune;
+    const t0=c.currentTime+start, end=t0+attack+dur+release;
+    g.gain.setValueAtTime(.0001,t0);
+    g.gain.linearRampToValueAtTime(vol,t0+attack);
+    g.gain.exponentialRampToValueAtTime(.0001,end);
+    let tail=o;
+    if(cutoff){ const f=c.createBiquadFilter(); f.type="lowpass"; f.frequency.value=cutoff; o.connect(f); tail=f; }
+    tail.connect(g); g.connect(c.destination);
+    o.start(t0); o.stop(end+.05);
   }catch(e){}
 }
 function buzz(ms){ if(navigator.vibrate)navigator.vibrate(ms); }
-function chime(){ beep(784,.12,.25); setTimeout(()=>beep(1175,.20,.28),95); } // rising two-note "got it!"
+const SFX={
+  start(){ note(523.25,0,.10,{type:"triangle",vol:.26}); note(783.99,.09,.18,{type:"triangle",vol:.28}); note(1046.5,.09,.20,{type:"sine",vol:.10}); }, // round begins
+  tick(){ note(660,0,.05,{type:"sine",vol:.16,attack:.002,release:.05}); }, // 3-2-1 countdown
+  correct(){ [523.25,659.25,783.99,1046.5].forEach((f,i)=>{ note(f,i*.065,.14,{type:"sine",vol:.30,release:.18,detune:3}); note(f*2,i*.065,.12,{type:"sine",vol:.07}); }); }, // ascending bell arpeggio
+  pass(){ note(392,0,.09,{type:"triangle",vol:.20}); note(261.6,.085,.15,{type:"triangle",vol:.18}); }, // gentle descending blip
+  warn(){ note(1046.5,0,.05,{type:"sine",vol:.20,attack:.002,release:.05}); }, // last-5s tick
+  timeup(){ note(440,0,.18,{type:"sawtooth",vol:.22,cutoff:1300}); note(329.6,.16,.20,{type:"sawtooth",vol:.22,cutoff:1050}); note(220,.34,.42,{type:"sawtooth",vol:.24,cutoff:850}); } // warm descending "time's up"
+};
 
 /* ---------- home ---------- */
 function bankFor(key){
@@ -1639,7 +1654,7 @@ function saveSeen(){
 }
 
 function startCountdown(){
-  beep(660,.1,.15); // unlock audio on the tap
+  ac(); // unlock audio on the tap
   deck=buildDeck(currentKey);deckPos=0;
   results=[];score=0;
   show("count");
@@ -1649,7 +1664,7 @@ function startCountdown(){
     if(n===0){startRound();return;}
     numEl.textContent=n;
     numEl.classList.remove("pop");void numEl.offsetWidth;numEl.classList.add("pop");
-    beep(520,.12,.2);
+    SFX.tick();
     n--;
     setTimeout(tick,900);
   };
@@ -1684,13 +1699,13 @@ function startRound(){
   nextWord();
   show("play");
   grabWakeLock();
-  beep(880,.2,.25);
+  SFX.start();
   timerId=setInterval(()=>{
     if(noLimit){ elapsed++; $("clock").textContent=fmt(elapsed); return; }
     timeLeft--;
     $("clock").textContent=fmt(Math.max(0,timeLeft));
     $("tbar").style.width=(timeLeft/roundTime*100)+"%";
-    if(timeLeft<=5&&timeLeft>0)beep(980,.08,.2);
+    if(timeLeft<=5&&timeLeft>0)SFX.warn();
     if(timeLeft<=0)endRound();
   },1000);
 }
@@ -1702,8 +1717,8 @@ function flash(cls){
 function mark(ok){
   if(!$("play").classList.contains("on"))return;
   results.push({word:$("word").textContent,ok});
-  if(ok){score++;chime();buzz(60);flash("flash-tama");}
-  else{beep(300,.16,.2);buzz([30,40,30]);flash("flash-pass");}
+  if(ok){score++;SFX.correct();buzz(60);flash("flash-tama");}
+  else{SFX.pass();buzz([30,40,30]);flash("flash-pass");}
   $("scoreChip").textContent=noLimit?(score+" / 5"):(score+" correct");
   if(noLimit&&score>=5){ endRound(); return; } // no-limit round: first to 5 correct
   nextWord();
@@ -1720,7 +1735,7 @@ function endRound(){
   clearInterval(timerId);timerId=null;
   if(wakeLock){wakeLock.release().catch(()=>{});wakeLock=null;}
   saveSeen();
-  beep(220,.5,.3);buzz(400);
+  SFX.timeup();buzz(400);
   document.querySelector("#results h2").textContent=noLimit?"Round over!":"Time's up!";
   $("finalScore").textContent=score;
   const wl=$("wordlist");wl.innerHTML="";
